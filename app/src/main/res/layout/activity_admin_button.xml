@@ -1,0 +1,329 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="gsysk.com.fmascreensforapp.AdminButtonActivity">
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableLayout1"
+        android:layout_centerInParent="true">
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1.0">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/listDrivers"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_alignBottom="@+id/row1col2"
+                android:background="@drawable/custom_btn_orange2"
+                android:id="@+id/row1col1"
+
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/listDropPoints"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:background="@drawable/custom_btn_orange2"
+                android:id="@+id/row1col2"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/listRouteDetails"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:background="@drawable/custom_btn_orange2"
+                android:id="@+id/row1col3"
+
+                />
+
+        </TableRow>
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/listVehicles"
+
+                android:background="@drawable/custom_btn_orange2"
+                android:id="@+id/row2col1"
+
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/viewRouteDetails"
+
+                android:background="@drawable/custom_btn_orange2"
+                android:id="@+id/row2col2"
+
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/trackVehicles"
+
+                android:background="@drawable/custom_btn_orange2"
+                android:id="@+id/row2col3"
+
+                />
+
+
+        </TableRow>
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/assignRouteToVehicles"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:background="@drawable/custom_btn_orange2"
+                android:id="@+id/row3col1"
+
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/assignFoodContainersToVehicles"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:background="@drawable/custom_btn_orange2"
+                android:id="@+id/row3col2"
+
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/listContactsAtDropPoints"
+                android:layout_weight="0.3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:background="@drawable/custom_btn_orange2"
+                android:id="@+id/row3col3"
+               />
+
+
+        </TableRow>
+    </TableLayout>
+
+<!--
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/listDrivers"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginTop="130dp"
+            android:layout_alignBottom="@+id/row1col2"
+            android:background="@drawable/custom_btn_orange2"
+            android:id="@+id/row1col1"
+
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/listDropPoints"
+            android:layout_marginTop="150dp"
+            android:background="@drawable/custom_btn_orange2"
+            android:id="@+id/row1col2"
+            android:layout_toRightOf="@+id/row1col1"
+            android:layout_marginLeft="15dp"/>
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/listRouteDetails"
+            android:layout_marginTop="150dp"
+            android:background="@drawable/custom_btn_orange2"
+            android:id="@+id/row1col3"
+            android:layout_toRightOf="@+id/row1col2"
+            android:layout_marginLeft="15dp"/>
+
+
+
+
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/listAvailableVehicles"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/custom_btn_orange2"
+            android:id="@+id/row2col1"
+            android:layout_below="@+id/row1col1"
+            android:layout_alignLeft="@+id/row1col1"
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/listRouteDetails"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/custom_btn_orange2"
+            android:id="@+id/row2col2"
+            android:layout_below="@id/row1col2"
+            android:layout_alignLeft="@+id/row1col2"
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="17dp"
+            android:paddingBottom="18dp"
+            android:text="@string/trackDetails"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/custom_btn_orange2"
+            android:id="@+id/row2col3"
+            android:layout_alignLeft="@+id/row1col3"
+            android:layout_below="@+id/row1col3"
+            android:layout_alignBottom="@+id/row2col2"
+           />
+
+
+
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/assignRouteToVehicles"
+            android:paddingTop="17dp"
+            android:paddingBottom="18dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/custom_btn_orange2"
+            android:id="@+id/row3col1"
+            android:layout_below="@+id/row2col1"
+            android:layout_alignLeft="@+id/row1col1"
+            android:layout_alignBottom="@+id/row3col2"
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/assignFoodContainersToVehicles"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/custom_btn_orange2"
+            android:id="@+id/row3col2"
+            android:layout_below="@+id/row2col2"
+            android:layout_alignLeft="@+id/row2col2"
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/listContactsAtDropPoints"
+            android:layout_marginTop="15dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@drawable/custom_btn_orange2"
+            android:id="@+id/row3col3"
+            android:layout_toRightOf="@+id/row3col2"
+            android:layout_below="@+id/row2col3"
+            android:layout_marginLeft="15dp"
+            android:layout_alignBottom="@+id/row3col2"/>
+
+
+
+
+
+-->
+
+</RelativeLayout>

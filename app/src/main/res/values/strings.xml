@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">FMA</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="usernamehint">Enter username</string>
+    <string name="passwordhint">Enter password</string>
+    <string name="login">  Login  </string>
+    <string name="clear">  Clear  </string>
+    <string name="remember">Remember me</string>
+
+    <string name="listDrivers">List \nDrivers</string>
+    <string name="listDropPoints">List \nDrop Points</string>
+    <string name="listRouteDetails">List \nRoutes</string>
+    <string name="listVehicles">List \nVehicles</string>
+    <string name="viewRouteDetails">View \nRoutes</string>
+    <string name="trackVehicles">Track \nVehicles</string>
+    <string name="assignRouteToVehicles">Assign \nRoutes</string>
+    <string name="assignFoodContainersToVehicles">Assign Food \nContainers</string>
+    <string name="listContactsAtDropPoints">List \nContacts</string>
+
+
+</resources>

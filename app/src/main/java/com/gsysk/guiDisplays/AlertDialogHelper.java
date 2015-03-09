@@ -105,4 +105,83 @@ public class AlertDialogHelper {
         dialog.show();
 
     }
+
+    public void createListAlertDialog(String cloudString)
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(curActivity);
+        builder.setTitle(titleMessage);
+        Dialog dialog = null;
+        ListView modeList = new ListView(curActivity);
+
+        String []detailsArray = cloudString.split(" ; ");
+        String[] nameArray = new String[detailsArray.length];
+        final String[] phoneNumArray = new String[detailsArray.length];
+
+
+        for(int ind=0;ind<detailsArray.length;ind++)
+        {
+            String [] parts = detailsArray[ind].split(" : ");
+            nameArray[ind] = " "+parts[0];
+            phoneNumArray[ind] = "  Number : "+parts[1];
+        }
+
+        // Each row in the list stores country name, currency and flag
+        List<HashMap<String,String>> aList = new ArrayList<HashMap<String,String>>();
+
+        for(int i=0;i<detailsArray.length;i++){
+            HashMap<String, String> hm = new HashMap<String,String>();
+            hm.put("mainTxt", nameArray[i]);
+            hm.put("subTxt",phoneNumArray[i]);
+
+            aList.add(hm);
+        }
+
+        // Keys used in Hashmap
+        String[] from = { "mainTxt","subTxt" };
+
+        // Ids of views in listview_layout
+        int[] to = { R.id.mainTxt,R.id.subTxt};
+        // Instantiating an adapter to store each items
+        // R.layout.listview_layout defines the layout of each item
+        SimpleAdapter modeAdapter = new SimpleAdapter(curActivity, aList, R.layout.listview_dialog_layout, from, to);
+
+        int[] colors = {0, 0xFFFF0000, 0}; // red for the example
+        modeList.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        modeList.setDividerHeight(2);
+        modeList.setAdapter(modeAdapter);
+
+        // Item Click Listener for the listview
+        AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View container, int position, long id) {
+                // Getting the Container Layout of the ListView
+                PhoneFunctions phoneFunctions = new PhoneFunctions(curActivity);
+
+                phoneFunctions.makePhoneCall(phoneNumArray,position);
+
+
+            }
+        };
+
+        // Setting the item click listener for the listview
+        modeList.setOnItemClickListener(itemClickListener);
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                if(dialog!=null)
+                {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.setView(modeList);
+        dialog = builder.create();
+
+
+        dialog.show();
+
+    }
 }

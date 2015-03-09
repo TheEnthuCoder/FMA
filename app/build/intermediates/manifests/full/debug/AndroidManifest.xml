@@ -48,7 +48,19 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.gsysk.activity.MapActivity"
+            android:name="com.gsysk.activity.VehicleTrackerMapActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.gsysk.activity.RoutesMapActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.gsysk.activity.MapActivityUser"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.gsysk.activity.MapsDriverActivity"
             android:screenOrientation="portrait" >
         </activity>
 

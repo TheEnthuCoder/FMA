@@ -36,6 +36,7 @@ public class AdminButtonActivity extends ActionBarActivity {
 	private Button listDrivers = null;
 	private Button listContacts = null;
 	private Button trackVehicles = null;
+    private String username="";
     private Button viewRoutes = null;
     public CloudInteractor pullAllService = null;
 	
@@ -47,7 +48,11 @@ public class AdminButtonActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_button);
-        
+
+
+        username = getIntent().getBundleExtra("DataBundle").getString("UserName");
+
+
         listDrivers = (Button)findViewById(R.id.row1col1);
         listContacts = (Button)findViewById(R.id.row3col3);
         trackVehicles = (Button)findViewById(R.id.row2col3);
@@ -165,7 +170,7 @@ public class AdminButtonActivity extends ActionBarActivity {
         }
         else if(id==R.id.action_refresh)
         {
-            new CloudParserAsyncTask(AdminButtonActivity.this,"admin").execute();
+            new CloudParserAsyncTask(AdminButtonActivity.this,"admin"+" : "+username).execute();
         }
         else if(id == R.id.action_logout)
         {

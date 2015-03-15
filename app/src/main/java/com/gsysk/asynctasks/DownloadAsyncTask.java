@@ -1,5 +1,6 @@
 package com.gsysk.asynctasks;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -20,10 +21,13 @@ public class DownloadAsyncTask extends AsyncTask<String, Void, String> {
 
     GoogleMap map = null;
     int color = -1;
-    public DownloadAsyncTask(GoogleMap map,int color)
+    Activity curActivity;
+
+    public DownloadAsyncTask(GoogleMap map,Activity activity, int color)
     {
         this.map = map;
         this.color = color;
+        curActivity = activity;
     }
     // Downloading data in non-ui thread
     @Override
@@ -47,7 +51,7 @@ public class DownloadAsyncTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-        ParserAsyncTask parserTask = new ParserAsyncTask(map,color);
+        ParserAsyncTask parserTask = new ParserAsyncTask(map,curActivity,color);
 
         // Invokes the thread for parsing the JSON data
         parserTask.execute(result);

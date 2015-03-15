@@ -1,5 +1,11 @@
 package com.gsysk.mapUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * Created by lenovo on 04-03-2015.
  */
@@ -9,6 +15,7 @@ public class RouteFormulator {
     private RouteMarker destination;
     private RouteMarker [][]dropPoints;
     private int numRoutes = 1;
+
 
 
     public RouteFormulator(String routeDetails)
@@ -22,7 +29,7 @@ public class RouteFormulator {
         //display(source);
         //Drop Points
 
-        dropPoints = new RouteMarker[parts.length-2][];
+        dropPoints = new RouteMarker[parts.length-1][];
         numRoutes = parts.length-2;
         for(int i=0;i<parts.length-2;i++)
         {
@@ -39,11 +46,31 @@ public class RouteFormulator {
 
 
 
+        //Sort them in order, based on their sequence numbers
+        for(int i=0;i<parts.length-2;i++)
+        {
+            List<RouteMarker> routeMarkerList = new ArrayList<RouteMarker>();
+            for(int j=0;j<dropPoints[i].length;j++)
+            {
+                routeMarkerList.add(j,dropPoints[i][j]);
+            }
+
+            Collections.sort(routeMarkerList);
+
+            for(int j=0;j<dropPoints[i].length;j++)
+            {
+                dropPoints[i][j] = routeMarkerList.get(j);
+            }
+        }
+
+
+
+/*
         //Destination Details
         String []dstParts = parts[parts.length-1].split(" / ");
         destination = new RouteMarker(dstParts);
        // display(destination);
-
+*/
 
 
     }

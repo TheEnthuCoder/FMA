@@ -1,7 +1,9 @@
 package com.gsysk.activity;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -28,7 +30,6 @@ public class MapActivityUser extends ActionBarActivity implements AdapterView.On
     static final LatLng iiitb = new LatLng(12.844846, 77.663231);
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +44,7 @@ public class MapActivityUser extends ActionBarActivity implements AdapterView.On
         listView = (ListView)findViewById(R.id.drawerlistuser);
         listView.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,useroption));
         listView.setOnItemClickListener(this);
+
         drawerLayout=(DrawerLayout)findViewById(R.id.drawer_layout);
         drawerListner = new ActionBarDrawerToggle(this,
                 drawerLayout,
@@ -52,7 +54,9 @@ public class MapActivityUser extends ActionBarActivity implements AdapterView.On
         {
             @Override
             public void onDrawerOpened(View drawerView) {
-                //super.onDrawerOpened(drawerView);
+                //super.onDrawerOpened(drawerView); super.onDrawerOpened(drawerView);
+
+
                 Toast.makeText(MapActivityUser.this, "Drawer Opened", Toast.LENGTH_SHORT).show();
             }
 
@@ -62,6 +66,8 @@ public class MapActivityUser extends ActionBarActivity implements AdapterView.On
                 Toast.makeText(MapActivityUser.this,"Drawer Closed",Toast.LENGTH_SHORT).show();
             }
         };
+
+
         drawerLayout.setDrawerListener(drawerListner);
 
     }

@@ -4,6 +4,7 @@ package com.gsysk.asynctasks;
  * Created by lenovo on 04-03-2015.
  */
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.AsyncTask;
 
@@ -12,6 +13,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.gsysk.parser.DirectionsJSONParser;
+import com.gsysk.phoneUtils.PhoneFunctions;
 import com.parse.Parse;
 
 import org.json.JSONObject;
@@ -26,10 +28,12 @@ public class ParserAsyncTask extends AsyncTask<String, Integer, List<List<HashMa
     // Parsing the data in non-ui thread
     GoogleMap map = null;
     int color = -1;
-    public ParserAsyncTask(GoogleMap map,int color)
+    Activity curActivity;
+    public ParserAsyncTask(GoogleMap map,Activity activity,int color)
     {
         this.map =map;
         this.color = color;
+        curActivity = activity;
     }
     @Override
     protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
@@ -52,6 +56,12 @@ public class ParserAsyncTask extends AsyncTask<String, Integer, List<List<HashMa
     // Executes in UI thread, after the parsing process
     @Override
     protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+
+        drawRoute(result);
+    }
+
+    private boolean drawRoute(List<List<HashMap<String, String>>> result)
+    {
         ArrayList<LatLng> points = null;
         PolylineOptions lineOptions = null;
         MarkerOptions markerOptions = new MarkerOptions();
@@ -79,19 +89,31 @@ public class ParserAsyncTask extends AsyncTask<String, Integer, List<List<HashMa
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(5);
+                lineOptions.width(7);
                 lineOptions.color(color);
             }
 
             // Drawing polyline in the Google Map for the i-th route
+            if(lineOptions == null)
+            {
+                System.out.println("Line options is null.. retracking");
+
+                return false;
+            }
+
+            else
+                System.out.println("Line options is not null");
             map.addPolyline(lineOptions);
+            int numRoutesDrawn = Integer.parseInt(PhoneFunctions.getFromPrivateSharedPreferences(curActivity,"NumOfRoutesDrawn"));
+            PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"NumOfRoutesDrawn",""+(numRoutesDrawn+1));
         }
-        catch(NullPointerException e)
+        catch(Exception e)
         {
             e.printStackTrace();
 
 
         }
 
+        return true;
     }
 }

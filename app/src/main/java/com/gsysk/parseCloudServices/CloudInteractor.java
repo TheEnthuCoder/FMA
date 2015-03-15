@@ -26,11 +26,14 @@ public class CloudInteractor {
     String response = "";
   ;
     int numberOfRoutes = -1;
+    String clusterNumbers = null;
     boolean canContinue_gdd = false;
     boolean canContinue_gud = false;
     boolean canContinue_login = false;
     boolean canContinue_aR = false;
     boolean canContinue_nR = false;
+    boolean canContinue_cladmin = false;
+    boolean canContinue_cldetails = false;
     public CloudInteractor(Activity activity)
     {
         curActivity = activity;
@@ -161,34 +164,12 @@ public class CloudInteractor {
         {
 
 
-            ParseCloud.callFunctionInBackground("getNumRoutes", params, new FunctionCallback<Integer>() {
-                public void done(Integer value, ParseException e) {
-                    if (e == null) {
-
-                        numberOfRoutes = value.intValue();
-
-                    } else {
-                        System.out.println("Got error");
-                        response = "Error : "+e.getMessage().toString();
-                    }
-
-                    canContinue_nR = true;
-                }
-
-            });
-
-            while(!canContinue_nR)
-            {
-
-            }
-            canContinue_nR = false;
 
 
-            HashMap<String,Object>routeDetails = new HashMap<String, Object>();
-            routeDetails.put("Number",numberOfRoutes);
-            routeDetails.put("Source",params.get("Source"));
-            routeDetails.put("Destination",params.get("Destination"));
-            ParseCloud.callFunctionInBackground("getAllDropPoints", routeDetails, new FunctionCallback<String>() {
+
+
+           // routeDetails.put("Destination",params.get("Destination"));
+            ParseCloud.callFunctionInBackground("getAllDropPoints", params, new FunctionCallback<String>() {
                 public void done(String value, ParseException e) {
                     if (e == null) {
 
@@ -223,6 +204,67 @@ public class CloudInteractor {
 
     }
 
+    public String getClusterDetails(final HashMap<String,Object> params)
+    {
+        try
+        {
+            ParseCloud.callFunctionInBackground("getAdminCluster", params, new FunctionCallback<String>() {
+                public void done(String value, ParseException e) {
+                    if (e == null) {
+
+                        clusterNumbers = value;
+                        System.out.println("Cluster Number "+clusterNumbers);
+
+                    } else {
+                        System.out.println("Got error in adminCluster");
+                        //response = "Error : "+e.getMessage().toString();
+                    }
+
+                    canContinue_cladmin = true;
+                }
+
+            });
+
+            while(!canContinue_cladmin)
+            {
+
+            }
+            canContinue_cladmin = false;
+
+            HashMap<String,Object> input = new HashMap<String,Object>();
+            input.put("ClusterNumber",clusterNumbers);
+
+            ParseCloud.callFunctionInBackground("getClusterParameters", input, new FunctionCallback<String>() {
+                public void done(String value, ParseException e) {
+                    if (e == null) {
+
+                        response = "Success : "+value;
+                        System.out.println(response);
+
+                    } else {
+                        System.out.println("Error in clusterParameters: "+e.getMessage().toString());
+                        response = "Error : "+e.getMessage().toString();
+                    }
+
+                    canContinue_cldetails = true;
+                }
+
+            });
+
+            while(!canContinue_cldetails)
+            {
+
+            }
+            canContinue_cldetails = false;
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return response;
+    }
     public void pullAllData(String queryType,List<ParseObject> parseObjectList)
     {
         ParseQuery<ParseObject> query = null;

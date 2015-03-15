@@ -3,7 +3,7 @@ package com.gsysk.mapUtils;
 /**
  * Created by lenovo on 04-03-2015.
  */
-public class RouteMarker
+public class RouteMarker implements Comparable<RouteMarker>
 {
     public String name;
     public int routeNum;
@@ -20,4 +20,9 @@ public class RouteMarker
         this.longitude = Float.parseFloat(parts[4]);
 
     }
+
+    @Override
+    public int compareTo(RouteMarker o) {
+    return Integer.compare(sequenceNum, o.sequenceNum);
+}
 }

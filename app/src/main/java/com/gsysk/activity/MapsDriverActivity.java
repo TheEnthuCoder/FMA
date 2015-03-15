@@ -44,6 +44,7 @@ public class MapsDriverActivity extends ActionBarActivity implements AdapterView
         listView = (ListView)findViewById(R.id.drawerList);
         listView.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,driveroption));
         listView.setOnItemClickListener(this);
+        listView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         drawerLayout=(DrawerLayout)findViewById(R.id.drawer_layout);
         drawerListner = new ActionBarDrawerToggle(this,drawerLayout,R.drawable.ic_drawer,
                 R.string.drawer_open,R.string.drawer_close)

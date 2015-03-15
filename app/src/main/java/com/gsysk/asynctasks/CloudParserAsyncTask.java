@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 
 import com.gsysk.activity.AdminButtonActivity;
 import com.gsysk.activity.MapActivityUser;
@@ -45,6 +46,8 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
         curActivity = activity;
         this.username = username;
         this.password = password;
+
+
       //  this.parseObjectList = parseObjectList;
         this.pullAllService = pullAllService;
     }
@@ -53,7 +56,8 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
         //  queryType = type;
         curActivity = activity;
         skipLogin = true;
-        this.roleType = roleType;
+        this.roleType = roleType.split(" : ")[0];
+        this.username = roleType.split(" : ")[1];
     }
     protected Void doInBackground(Void... params)
     {
@@ -139,6 +143,10 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
             if(roleType.equals(ConstantValues.ROLE_ADMIN)&&!skipLogin)
             {
                 Intent intent = new Intent(curActivity.getApplicationContext(), AdminButtonActivity.class);
+
+                Bundle b = new Bundle();
+                b.putString("UserName",username);
+                intent.putExtra("DataBundle",b);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 curActivity.startActivity(intent);
 
@@ -147,6 +155,9 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
             else if(roleType.equals(ConstantValues.ROLE_USER))
             {
                 Intent intent = new Intent(curActivity.getApplicationContext(), MapActivityUser.class);
+                Bundle b = new Bundle();
+                b.putString("UserName",username);
+                intent.putExtra("DataBundle",b);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 curActivity.startActivity(intent);
 
@@ -155,6 +166,9 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
             else if(roleType.equals(ConstantValues.ROLE_DRIVER))
             {
                 Intent intent = new Intent(curActivity.getApplicationContext(), MapsDriverActivity.class);
+                Bundle b = new Bundle();
+                b.putString("UserName",username);
+                intent.putExtra("DataBundle",b);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 curActivity.startActivity(intent);
 
@@ -205,18 +219,67 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
         }
         response="";
 
+        curActivity.runOnUiThread(new Runnable()
+        {
 
-        input.put("Source","Silk Board");
-        input.put("Destination","Hebbal");
-        response = pullAllService.getAllDropPointsAndRoutes(input);
-
-       // displayToastInUi(response);
-        /*curActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                System.out.println(response);
+                System.out.println(PhoneFunctions.getFromPrivateSharedPreferences(curActivity,"UserName"));
             }
-        });*/
+        });
+        input.put("Name",username);
+
+        response = pullAllService.getClusterDetails(input);
+        if(response.startsWith("Success : "))
+        {
+            response = response.substring(10);
+        }
+
+
+        input.clear();
+
+        String responseCopy = new String(response);
+        response="";
+        final String [] clusters = responseCopy.split(" # ");
+        PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"NoOfClusters",String.valueOf(clusters.length));
+        for(int x=0;x<clusters.length;x++)
+        {
+            //Getting all drop points of the given cluster, according to various routes belonging to that cluster
+            input.put("Source",clusters[x].split(" : ")[0]);
+            final String source = clusters[x].split(" : ")[0];
+            final String routes = clusters[x].split(" : ")[1];
+            curActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("Source : "+source);
+                    System.out.println("Routes : "+routes);
+                }
+            });
+            input.put("RouteNumArray", routes);
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            //  input.put("Destination","Hebbal");
+            if(x==0)
+            {
+                response = response.concat(pullAllService.getAllDropPointsAndRoutes(input)+" # ");
+            }
+            else
+            {
+                response = response.concat(pullAllService.getAllDropPointsAndRoutes(input).substring(10)+" # ");
+            }
+
+
+            input.clear();
+        }
+
+
+       // displayToastInUi(response);
+        curActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Points : "+response);
+            }
+        });
 
         if(response.startsWith("Success : "))
         {

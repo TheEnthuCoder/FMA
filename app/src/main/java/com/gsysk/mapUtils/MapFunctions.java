@@ -115,73 +115,78 @@ public class MapFunctions {
 
 
 
-    public static void plotAllRoutes(final Activity curActivity, final GoogleMap map,RouteFormulator routes)
+    public static void plotAllRoutes(final Activity curActivity, final GoogleMap map,RouteFormulator [] routes)
     {
 
-        LatLng source = new LatLng(routes.getSource().latitude,routes.getSource().longitude);
-        LatLng destination = new LatLng(routes.getDestination().latitude,routes.getDestination().longitude);
-
-        int numberOfRoutes = routes.getNumberOfRoutes();
-
-        LatLng dropPoints[][] = new LatLng[numberOfRoutes][];
-
-        for(int i=0;i<numberOfRoutes;i++)
+        int numRoutesPlotted = 0;
+        for(int k=0;k<routes.length;k++)
         {
-            dropPoints[i] = new LatLng[routes.getDropPoints()[i].length];
-            for(int j=0;j<routes.getDropPoints()[i].length;j++)
-            {
-                dropPoints[i][j] = new LatLng(routes.getDropPoints()[i][j].latitude,routes.getDropPoints()[i][j].longitude);
-            }
-        }
+            LatLng source = new LatLng(routes[k].getSource().latitude,routes[k].getSource().longitude);
+            //    LatLng destination = new LatLng(routes.getDestination().latitude,routes.getDestination().longitude);
 
+            int numberOfRoutes = routes[k].getNumberOfRoutes();
 
-
-
-        if(map!=null){
-
-            // Enable MyLocation Button in the Map
-            map.setMyLocationEnabled(true);
-
-            // Getting LocationManager object from System Service LOCATION_SERVICE
-            LocationManager locationManager = (LocationManager) curActivity.getSystemService(Context.LOCATION_SERVICE);
-
-            // Creating a criteria object to retrieve provider
-            Criteria criteria = new Criteria();
-
-            // Getting the name of the best provider
-            String provider = locationManager.getBestProvider(criteria, true);
+            LatLng dropPoints[][] = new LatLng[numberOfRoutes][];
 
             for(int i=0;i<numberOfRoutes;i++)
             {
-                String url = MapFunctions.getDirectionsUrl(source, dropPoints[i][0]);
-
-                DownloadAsyncTask downloadTask = new DownloadAsyncTask(map,ConstantValues.COLOR_ARRAY[i]);
-
-                // Start downloading json data from Google Directions API
-                downloadTask.execute(url);
-                int j=0;
-                for(j=0;j<dropPoints[i].length-1;j++)
+                dropPoints[i] = new LatLng[routes[k].getDropPoints()[i].length];
+                for(int j=0;j<routes[k].getDropPoints()[i].length;j++)
                 {
-                    String url2 = MapFunctions.getDirectionsUrl(dropPoints[i][j],dropPoints[i][j+1]);
-
-                    DownloadAsyncTask downloadTask2 = new DownloadAsyncTask(map,ConstantValues.COLOR_ARRAY[i]);
-
-                    // Start downloading json data from Google Directions API
-                    downloadTask2.execute(url2);
+                    dropPoints[i][j] = new LatLng(routes[k].getDropPoints()[i][j].latitude,routes[k].getDropPoints()[i][j].longitude);
                 }
-
-                String url3 = MapFunctions.getDirectionsUrl(dropPoints[i][j], destination);
-
-                DownloadAsyncTask downloadTask3 = new DownloadAsyncTask(map,ConstantValues.COLOR_ARRAY[i]);
-
-                // Start downloading json data from Google Directions API
-                downloadTask3.execute(url3);
             }
 
 
 
 
+            if(map!=null){
+
+                // Enable MyLocation Button in the Map
+                map.setMyLocationEnabled(true);
+
+                // Getting LocationManager object from System Service LOCATION_SERVICE
+                LocationManager locationManager = (LocationManager) curActivity.getSystemService(Context.LOCATION_SERVICE);
+
+                // Creating a criteria object to retrieve provider
+                Criteria criteria = new Criteria();
+
+                // Getting the name of the best provider
+                String provider = locationManager.getBestProvider(criteria, true);
+
+                for(int i=0;i<numberOfRoutes;i++)
+                {
+                    String url = MapFunctions.getDirectionsUrl(source, dropPoints[i][0]);
+
+                    DownloadAsyncTask downloadTask = new DownloadAsyncTask(map,curActivity,ConstantValues.COLOR_ARRAY[numRoutesPlotted+i]);
+
+                    // Start downloading json data from Google Directions API
+                    downloadTask.execute(url);
+                    int j=0;
+                    for(j=0;j<dropPoints[i].length-1;j++)
+                    {
+                        String url2 = MapFunctions.getDirectionsUrl(dropPoints[i][j],dropPoints[i][j+1]);
+
+                        DownloadAsyncTask downloadTask2 = new DownloadAsyncTask(map,curActivity,ConstantValues.COLOR_ARRAY[numRoutesPlotted+i]);
+
+                        // Start downloading json data from Google Directions API
+                        downloadTask2.execute(url2);
+                    }
+
+                    //  String url3 = MapFunctions.getDirectionsUrl(dropPoints[i][j], destination);
+
+                    //  DownloadAsyncTask downloadTask3 = new DownloadAsyncTask(map,ConstantValues.COLOR_ARRAY[i]);
+
+                    // Start downloading json data from Google Directions API
+                    // downloadTask3.execute(url3);
+                }
+
+
+
+                numRoutesPlotted+= numberOfRoutes;
+            }
         }
+
     }
 
 

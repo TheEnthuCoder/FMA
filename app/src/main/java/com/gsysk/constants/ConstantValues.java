@@ -15,6 +15,9 @@ public class ConstantValues {
     public static final String APP_KEY = "XdzcMtL72Ho3GmVBbCaEY7pzdg8cGXF1EkyTbdUw";
     public static final String CLIENT_KEY = "mpsFnnEuQURv0KzH4dPy0xtV8vN8gZdRTSzCDoix";
 
+  //  public static final String APP_KEY = "CK9lnaitC652sP16G9eqLykRzG0jqc2seR2GpsFp";
+ //   public static final String CLIENT_KEY = "FDP6KGf686lQtWPGpGJ16odEuqX6KRy6MboN9smF";
+
     public static final String ENABLE_INTERNET="Please connect to a wifi network or enable mobile data on your phone";
     public static final String PLEASE_TRY_AGAIN= "Error retrieving data. Please go back to login screen and try logging in again.";
 

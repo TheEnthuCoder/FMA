@@ -32,6 +32,7 @@ public class CloudInteractor {
     boolean canContinue_login = false;
     boolean canContinue_aR = false;
     boolean canContinue_nR = false;
+    boolean canContinue_gD = false;
     boolean canContinue_cladmin = false;
     boolean canContinue_cldetails = false;
     public CloudInteractor(Activity activity)
@@ -157,6 +158,51 @@ public class CloudInteractor {
 
     }
 
+    public String getDriverLoc(final HashMap<String,Object> params)
+    {
+        try
+        {
+
+
+
+
+
+
+            // routeDetails.put("Destination",params.get("Destination"));
+            ParseCloud.callFunctionInBackground("getDriverLocation", params, new FunctionCallback<String>() {
+                public void done(String value, ParseException e) {
+                    if (e == null) {
+
+                        response = "Success : "+value;
+                    } else {
+                        System.out.println("Got error");
+                        response = "Error : "+e.getMessage().toString();
+                    }
+                    canContinue_gD = true;
+                }
+
+            });
+
+
+
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+
+        while(!canContinue_gD)
+        {
+
+        }
+        canContinue_gD = false;
+
+        return response;
+
+    }
     public String getAllDropPointsAndRoutes(final HashMap<String,Object> params)
     {
 

@@ -66,7 +66,7 @@ public class VehicleTrackerMapActivity extends ActionBarActivity {
                     int count = 1;
                     for(int j=0;j<routes[k].getDropPoints()[i].length;j++,count++)
                     {
-                        dropPoints[i][j] = map.addMarker(new MarkerOptions().position(new LatLng(routes[k].getDropPoints()[i][j].latitude, routes[k].getDropPoints()[i][j].longitude)).title(count + " : " +routes[k].getDropPoints()[i][j].name));
+                        dropPoints[i][j] = map.addMarker(new MarkerOptions().position(new LatLng(routes[k].getDropPoints()[i][j].latitude, routes[k].getDropPoints()[i][j].longitude)).title(count + " : " +routes[k].getDropPoints()[i][j].name).icon(BitmapDescriptorFactory.fromResource(R.drawable.redbusstop)));
                     }
 
                 }
@@ -78,7 +78,7 @@ public class VehicleTrackerMapActivity extends ActionBarActivity {
 
             MapFunctions.plotAllRoutes(this,map,routes);
 
-            final CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(meanOf(sourceArray),10f);
+           /* final CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(meanOf(sourceArray),10f);
 
 
             // Initializing
@@ -90,7 +90,10 @@ public class VehicleTrackerMapActivity extends ActionBarActivity {
                     map.animateCamera(cu);
                 }
             });
-
+*/
+            LatLng meanSrc =meanOf(sourceArray);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(meanSrc,
+                    10f));
         }
         catch(Exception e)
         {

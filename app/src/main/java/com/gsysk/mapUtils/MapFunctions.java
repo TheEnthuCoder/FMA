@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.gsysk.asynctasks.DownloadAsyncTask;
+import com.gsysk.asynctasks.ParserAsyncTask;
 import com.gsysk.constants.ConstantValues;
 import com.gsysk.parser.DirectionsJSONParser;
 
@@ -43,6 +44,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -60,11 +62,55 @@ public class MapFunctions {
         // Destination of route
         String str_dest = "destination="+dest.latitude+","+dest.longitude;
 
+
+
         // Sensor enabled
         String sensor = "sensor=false";
 
+
+
         // Building the parameters to the web service
         String parameters = str_origin+"&"+str_dest+"&"+sensor;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+
+        return url;
+    }
+
+    public static String getDirectionsUrl(LatLng source, LatLng [] points){
+
+       /*String waypoints = "waypoints=optimize:true|"
+                + LOWER_MANHATTAN.latitude + "," + LOWER_MANHATTAN.longitude
+                + "|" + "|" + BROOKLYN_BRIDGE.latitude + ","
+                + BROOKLYN_BRIDGE.longitude + "|" + WALL_STREET.latitude + ","
+                + WALL_STREET.longitude;
+*/
+        // Origin of route
+        String str_origin = "origin="+source.latitude+","+source.longitude;
+
+        // Destination of route
+        String str_dest = "destination="+points[points.length-1].latitude+","+points[points.length-1].longitude;
+        String waypoints = "waypoints=optimize:true";
+
+        for(int i=0;i<points.length-1;i++)
+        {
+            System.out.println(i+ " : "+points[i].latitude+" "+points[i].longitude);
+            waypoints = waypoints.concat("|"+points[i].latitude+","+points[i].longitude);
+        }
+
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+
+
+        // Building the parameters to the web service
+        String parameters = str_origin+"&"+str_dest+"&"+ waypoints+"&"+sensor;
+
 
         // Output format
         String output = "json";
@@ -115,6 +161,9 @@ public class MapFunctions {
 
 
 
+
+
+
     public static void plotAllRoutes(final Activity curActivity, final GoogleMap map,RouteFormulator [] routes)
     {
 
@@ -156,7 +205,7 @@ public class MapFunctions {
 
                 for(int i=0;i<numberOfRoutes;i++)
                 {
-                    String url = MapFunctions.getDirectionsUrl(source, dropPoints[i][0]);
+                   /* String url = MapFunctions.getDirectionsUrl(source, dropPoints[i][0]);
 
                     DownloadAsyncTask downloadTask = new DownloadAsyncTask(map,curActivity,ConstantValues.COLOR_ARRAY[numRoutesPlotted+i]);
 
@@ -179,11 +228,17 @@ public class MapFunctions {
 
                     // Start downloading json data from Google Directions API
                     // downloadTask3.execute(url3);
+*/
+
+                    String url = MapFunctions.getDirectionsUrl(source,dropPoints[i]);
+                    DownloadAsyncTask downloadTask = new DownloadAsyncTask(map,curActivity,ConstantValues.COLOR_ARRAY[numRoutesPlotted++]);
+                    downloadTask.execute(url);
+
                 }
 
 
 
-                numRoutesPlotted+= numberOfRoutes;
+
             }
         }
 
@@ -262,5 +317,7 @@ public class MapFunctions {
         }
         return f*1000;
     }
+
+
 
 }

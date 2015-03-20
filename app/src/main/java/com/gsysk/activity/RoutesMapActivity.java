@@ -2,8 +2,12 @@ package com.gsysk.activity;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -14,15 +18,34 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.gsysk.fma.R;
 import com.gsysk.mapUtils.MapFunctions;
 import com.gsysk.mapUtils.RouteFormulator;
+import com.gsysk.mapUtils.RouteMarker;
+import com.gsysk.parseCloudServices.CloudInteractor;
 import com.gsysk.phoneUtils.PhoneFunctions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class RoutesMapActivity extends ActionBarActivity {
 
 	GoogleMap map = null;
 	RouteFormulator []routes = null;
+    Marker driverMarker = null;
+    private Handler handler = null;
 
 	@SuppressLint("NewApi") @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +95,7 @@ public class RoutesMapActivity extends ActionBarActivity {
                     int count = 1;
                     for(int j=0;j<routes[k].getDropPoints()[i].length;j++,count++)
                     {
-                        dropPoints[i][j] = map.addMarker(new MarkerOptions().position(new LatLng(routes[k].getDropPoints()[i][j].latitude, routes[k].getDropPoints()[i][j].longitude)).title(count + " : " +routes[k].getDropPoints()[i][j].name));
+                        dropPoints[i][j] = map.addMarker(new MarkerOptions().position(new LatLng(routes[k].getDropPoints()[i][j].latitude, routes[k].getDropPoints()[i][j].longitude)).title(count + " : " +routes[k].getDropPoints()[i][j].name).icon(BitmapDescriptorFactory.fromResource(R.drawable.redbusstop)));
                     }
 
                 }
@@ -88,9 +111,16 @@ public class RoutesMapActivity extends ActionBarActivity {
             }
 
 
-            MapFunctions.plotAllRoutes(this,map,routes);
+           MapFunctions.plotAllRoutes(this,map,routes);
+        /*    for(int i=0;i<routes.length;i++)
+            {
 
-            final CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(meanOf(sourceArray),10f);
+                ReadTask downloadTask = new ReadTask();
+                downloadTask.execute(getMapsApiDirectionsUrl(routes[i],i));
+            }
+*/
+           /* final CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(meanOf(sourceArray),10f);
+
 
 
           // Initializing
@@ -100,10 +130,19 @@ public class RoutesMapActivity extends ActionBarActivity {
                 public void onMapLoaded() {
                     //map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
                     map.animateCamera(cu);
+
                 }
             });
+*/
 
-
+            LatLng meanSrc =meanOf(sourceArray);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(meanSrc,
+                    10f));
+/*
+            handler = new Handler();
+            handler.removeCallbacks(sendUpdatesToUI);
+            handler.postDelayed(sendUpdatesToUI, 10000); // 10 second
+            */
 
         }
         catch(Exception e)
@@ -142,6 +181,38 @@ public class RoutesMapActivity extends ActionBarActivity {
 
         return(new LatLng(meanLat,meanLong));
     }
-	
+
+    private Runnable sendUpdatesToUI = new Runnable() {
+        public void run() {
+            Log.d("FMA","In service run");
+
+            CloudInteractor Ci = new CloudInteractor(RoutesMapActivity.this);
+            String driverLoc = Ci.getDriverLoc(new HashMap<String, Object>());
+
+            if(driverLoc.startsWith("Success : "))
+            {
+                final String [] parts = driverLoc.substring(10).split(" : ");
+
+                RoutesMapActivity.this.runOnUiThread(new Runnable()
+                                                     {
+
+                    @Override
+                    public void run() {
+                        if(driverMarker!=null)
+                        {
+                            driverMarker.remove();
+                        }
+                        driverMarker = map.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(parts[1]),Double.valueOf(parts[2]))).title(parts[0]).icon(BitmapDescriptorFactory.fromResource(R.drawable.van)));
+
+                    }
+                });
+
+            }
+
+            handler.postDelayed(this, 10000); // 10 seconds
+        }
+    };
 }
+	
+
 

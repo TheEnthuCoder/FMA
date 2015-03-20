@@ -25,6 +25,25 @@
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
 
+    <string name="title_section1">Routes</string>
+
+    <string name="title_section2">Stop Details</string>
+
+    <string name="title_section3">Admin Details</string>
+
+    <string name="title_section4">Users Details</string>
+
+    <string name="title_section5">Check Confirmation</string>
+
+    <string name="title_section6">Logout</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+
     <string-array name="driveroptions">
 
     <item>Routes</item>
@@ -56,4 +75,11 @@
 </string-array>
 
     <string name="title_activity_map_activity_user">Map</string>
+
+
+
+
+
+
+
 </resources>

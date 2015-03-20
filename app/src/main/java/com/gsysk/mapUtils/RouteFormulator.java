@@ -95,6 +95,8 @@ public class RouteFormulator {
         return dropPoints;
     }
 
+    public RouteMarker[] getDropPointsInRoute(int i) {return  dropPoints[i];}
+
     private void display(RouteMarker r)
     {
         System.out.println("-----------------------------------");

@@ -94,14 +94,14 @@ public class ParserAsyncTask extends AsyncTask<String, Integer, List<List<HashMa
             }
 
             // Drawing polyline in the Google Map for the i-th route
-            if(lineOptions == null)
+         /*   if(lineOptions == null)
             {
                 System.out.println("Line options is null.. retracking");
 
                 return false;
             }
 
-            else
+            else */
                 System.out.println("Line options is not null");
             map.addPolyline(lineOptions);
             int numRoutesDrawn = Integer.parseInt(PhoneFunctions.getFromPrivateSharedPreferences(curActivity,"NumOfRoutesDrawn"));

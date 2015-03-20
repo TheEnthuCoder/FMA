@@ -181,6 +181,11 @@
     <item name="dialog_fixed_height_minor" type="dimen">100%</item>
     <item name="dialog_fixed_width_major" type="dimen">320dp</item>
     <item name="dialog_fixed_width_minor" type="dimen">320dp</item>
+    <!-- From: file:/C:/Users/lenovo/AndroidstudioProjects/FMA/app/src/main/res/values/dimens.xml -->
+    <eat-comment/>
+    <dimen name="navigation_drawer_width">240dp</dimen>
+    <!-- From: file:/C:/Users/lenovo/AndroidstudioProjects/FMA/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
+    <eat-comment/>
     <item name="action_bar_activity_content" type="id"/>
     <item name="action_menu_divider" type="id"/>
     <item name="action_menu_presenter" type="id"/>
@@ -211,6 +216,7 @@
     <string name="accept">Accept</string>
     <!-- From: file:/C:/Users/lenovo/AndroidstudioProjects/FMA/app/src/main/res/values/strings.xml -->
     <eat-comment/>
+    <string name="action_example">Example action</string>
     <string name="action_logout">Log Out</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
@@ -264,6 +270,8 @@
     <string name="listRouteDetails">List \nRoutes</string>
     <string name="listVehicles">List \nVehicles</string>
     <string name="login">  Login  </string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="passwordhint">Enter password</string>
     <string name="remember">Remember me</string>
     <!-- From: file:/C:/Users/lenovo/AndroidstudioProjects/FMA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/res/values/admob_strings.xml -->
@@ -273,6 +281,12 @@
     <!-- From: file:/C:/Users/lenovo/AndroidstudioProjects/FMA/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="title_activity_map_activity_user">Map</string>
+    <string name="title_section1">Routes</string>
+    <string name="title_section2">Stop Details</string>
+    <string name="title_section3">Admin Details</string>
+    <string name="title_section4">Users Details</string>
+    <string name="title_section5">Check Confirmation</string>
+    <string name="title_section6">Logout</string>
     <string name="trackVehicles">Track \nVehicles</string>
     <string name="usernamehint">Enter username</string>
     <string name="viewRouteDetails">View \nRoutes</string>

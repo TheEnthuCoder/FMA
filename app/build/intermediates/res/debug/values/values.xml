@@ -282,11 +282,17 @@
     <eat-comment/>
     <string name="title_activity_map_activity_user">Map</string>
     <string name="title_section1">Routes</string>
+    <string name="title_section1_for_user">Vehicle Location</string>
     <string name="title_section2">Stop Details</string>
+    <string name="title_section2_for_user">Admin</string>
     <string name="title_section3">Admin Details</string>
+    <string name="title_section3_for_user">Driver</string>
     <string name="title_section4">Users Details</string>
+    <string name="title_section4_for_user">DropPoint</string>
     <string name="title_section5">Check Confirmation</string>
+    <string name="title_section5_for_user">Confirm</string>
     <string name="title_section6">Logout</string>
+    <string name="title_section6_for_user">Logout</string>
     <string name="trackVehicles">Track \nVehicles</string>
     <string name="usernamehint">Enter username</string>
     <string name="viewRouteDetails">View \nRoutes</string>

@@ -24,6 +24,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -70,9 +71,6 @@ public class MapsDriverActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Parse.enableLocalDatastore(this);
-
-        Parse.initialize(this, "XdzcMtL72Ho3GmVBbCaEY7pzdg8cGXF1EkyTbdUw", "mpsFnnEuQURv0KzH4dPy0xtV8vN8gZdRTSzCDoix");
 
         setContentView(R.layout.activity_main);
         setUpMapIfNeeded();
@@ -246,7 +244,7 @@ public class MapsDriverActivity extends ActionBarActivity
             latitude= loc.getDouble("latitude");
             longitude = loc.getDouble("longitude");
             LatLng latLng = new LatLng(latitude, longitude);
-            marker = mMap.addMarker(new MarkerOptions().position(latLng).title("MyLocation"));
+            marker = mMap.addMarker(new MarkerOptions().position(latLng).title("MyLocation").icon(BitmapDescriptorFactory.fromResource(R.drawable.van)));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(11), 2000, null);
 
@@ -396,7 +394,7 @@ public class MapsDriverActivity extends ActionBarActivity
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
 
 
-        options = new MarkerOptions().position(latLng).title("I am here!");
+        options = new MarkerOptions().position(latLng).title("I am here!").icon(BitmapDescriptorFactory.fromResource(R.drawable.van));
         if(marker!=null){
             marker.remove();
         }

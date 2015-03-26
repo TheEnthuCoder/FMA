@@ -37,6 +37,14 @@
 
     <string name="title_section6">Logout</string>
 
+
+    <string name="title_section1_for_user">Vehicle Location</string>
+    <string name="title_section2_for_user">Admin</string>
+    <string name="title_section3_for_user">Driver</string>
+    <string name="title_section4_for_user">DropPoint</string>
+    <string name="title_section5_for_user">Confirm</string>
+    <string name="title_section6_for_user">Logout</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
 
     <string name="navigation_drawer_close">Close navigation drawer</string>

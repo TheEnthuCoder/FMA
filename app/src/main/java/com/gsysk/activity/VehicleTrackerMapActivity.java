@@ -13,9 +13,15 @@ import com.gsysk.fma.R;
 import com.gsysk.mapUtils.MapFunctions;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.gsysk.mapUtils.*;
 import com.gsysk.phoneUtils.*;
@@ -24,6 +30,9 @@ public class VehicleTrackerMapActivity extends ActionBarActivity {
 
 	GoogleMap map = null;
 	RouteFormulator [] routes = null;
+    Intent intent = null;
+    Marker vehicle = null;
+    MarkerOptions options = null;
 
 	@SuppressLint("NewApi") @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +100,10 @@ public class VehicleTrackerMapActivity extends ActionBarActivity {
                 }
             });
 */
+            intent = new Intent(this, DriverLocation.class);
+
+
+
             LatLng meanSrc =meanOf(sourceArray);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(meanSrc,
                     10f));
@@ -130,6 +143,51 @@ public class VehicleTrackerMapActivity extends ActionBarActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(intent);
+        registerReceiver(broadcastreceiver, new IntentFilter(DriverLocation.BROADCAST_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastreceiver);
+        stopService(intent);
+    }
+
+    private BroadcastReceiver broadcastreceiver  = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Bundle loc = intent.getBundleExtra("LOC");
+            double latitude = loc.getDouble("LATITUDE");
+            double longitude = loc.getDouble("LONGITUDE");
+            Log.d("Myapp", String.valueOf(latitude));
+            Toast.makeText(VehicleTrackerMapActivity.this,
+                    "Triggered by Service!\n"
+                            + "Data passed: Latitude : " + String.valueOf(latitude) + " Longitude : " + String.valueOf(longitude),
+                    Toast.LENGTH_LONG).show();
+
+            handleNewLocation(latitude,longitude);
+        }
+    };
+
+    private void handleNewLocation(double currentLatitude,double currentLongitude) {
+
+
+        //storeLocationInCloud(currentLatitude,currentLongitude);
+
+        LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+
+
+        options = new MarkerOptions().position(latLng).title("Vehicle Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.van));
+        if(vehicle!=null){
+            vehicle.remove();
+        }
+        vehicle = map.addMarker(options);
+    }
 
        
 	

@@ -1,104 +1,94 @@
 package com.gsysk.activity;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.gsysk.fma.R;
+import com.gsysk.guiDisplays.NavigationDrawerFragmentUser;
+import com.gsysk.phoneUtils.DriverLocation;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
-public class MapActivityUser extends ActionBarActivity implements AdapterView.OnItemClickListener {
+import java.util.List;
+
+public class MapActivityUser extends ActionBarActivity
+        implements NavigationDrawerFragmentUser.NavigationDrawerCallbacks {
+
+    /**
+     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+     */
+    private NavigationDrawerFragmentUser mNavigationDrawerFragment;
+
+    /**
+     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+     */
+    private CharSequence mTitle;
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private DrawerLayout drawerLayout;
-    private ListView listView;
-    private String[] useroption;
-    private ActionBarDrawerToggle drawerListner;
-    static final LatLng iiitb = new LatLng(12.844846, 77.663231);
-
+    //static final LatLng iiitb = new LatLng(12.844846, 77.663231);
+    //
+    //GoogleApiClient mGoogleApiClient;
+    public static final String TAG = MapActivityUser.class.getSimpleName();
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    private LocationRequest mLocationRequest;
+    private MarkerOptions options;
+    Marker marker= null;
+    //private static final String TAG = "BroadcastTest";
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_activity_user);
+
+
+        setContentView(R.layout.activity_main_user);
         setUpMapIfNeeded();
-        setupdrawer();
+
+        mNavigationDrawerFragment = (NavigationDrawerFragmentUser)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
+
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        intent = new Intent(this, DriverLocation.class);
     }
 
-    private void setupdrawer() {
-
-        useroption = getResources().getStringArray(R.array.driveroptions);
-        listView = (ListView)findViewById(R.id.drawerlistuser);
-        listView.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,useroption));
-        listView.setOnItemClickListener(this);
-
-        drawerLayout=(DrawerLayout)findViewById(R.id.drawer_layout);
-        drawerListner = new ActionBarDrawerToggle(this,
-                drawerLayout,
-                R.drawable.ic_drawer,
-                R.string.drawer_open,
-                R.string.drawer_close)
-        {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                //super.onDrawerOpened(drawerView); super.onDrawerOpened(drawerView);
-
-
-                Toast.makeText(MapActivityUser.this, "Drawer Opened", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                //super.onDrawerClosed(drawerView);
-                Toast.makeText(MapActivityUser.this,"Drawer Closed",Toast.LENGTH_SHORT).show();
-            }
-        };
-
-
-        drawerLayout.setDrawerListener(drawerListner);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setUpMapIfNeeded();
-    }
-
-    /**
-     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
-     * installed) and the map has not already been instantiated.. This will ensure that we only ever
-     * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p/>
-     * If it isn't installed {@link com.google.android.gms.maps.SupportMapFragment} (and
-     * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
-     * install/update the Google Play services APK on their device.
-     * <p/>
-     * A user can return to this FragmentActivity after following the prompt and correctly
-     * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
-     * have been completely destroyed during this process (it is likely that it would only be
-     * stopped or paused), {@link #onCreate(android.os.Bundle)} may not be called again so we should call this
-     * method in {@link #onResume()} to guarantee that it will be called.
-     */
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
+        //setUpMap();
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapuser))
-                    .getMap();
+            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapuser)).getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
@@ -106,31 +96,182 @@ public class MapActivityUser extends ActionBarActivity implements AdapterView.On
         }
     }
 
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(iiitb).title("IIITB"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(iiitb, 15));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+
+        Log.d("MyApp", "In setUpMap");
+
+
+        //get the current location from cloud here .
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("vehiclelocation");
+        List<ParseObject> vehicleloc;
+        ParseObject loc = new ParseObject("vehiclelocation");
+        double latitude,longitude;
+        query.whereEqualTo("vehicleid",1);
+        try {
+            vehicleloc = query.find();
+            loc = vehicleloc.get(0);
+            latitude= loc.getDouble("latitude");
+            longitude = loc.getDouble("longitude");
+            LatLng latLng = new LatLng(latitude, longitude);
+            marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Vehicle Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.van)));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(11), 2000, null);
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this,useroption[position]+" selected",Toast.LENGTH_SHORT).show();
-        selectItem(position);
+    protected void onResume() {
+        super.onResume();
+        startService(intent);
+        registerReceiver(broadcastreceiver, new IntentFilter(DriverLocation.BROADCAST_ACTION));
     }
 
-    public void selectItem(int position) {
-        listView.setItemChecked(position,true);
-        setTitle(useroption[position]);
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastreceiver);
+        stopService(intent);
     }
-    public void setTitle(String title){
-        getSupportActionBar().setTitle(title);
 
+    private BroadcastReceiver broadcastreceiver  = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Bundle loc = intent.getBundleExtra("LOC");
+            double latitude = loc.getDouble("LATITUDE");
+            double longitude = loc.getDouble("LONGITUDE");
+            Log.d("Myapp",String.valueOf(latitude));
+            Toast.makeText(MapActivityUser.this,
+                    "Triggered by Service!\n"
+                            + "Data passed: Latitude : " + String.valueOf(latitude) + " Longitude : " + String.valueOf(longitude),
+                    Toast.LENGTH_LONG).show();
+
+            handleNewLocation(latitude,longitude);
+        }
+    };
+
+    private void handleNewLocation(double currentLatitude,double currentLongitude) {
+
+
+        //storeLocationInCloud(currentLatitude,currentLongitude);
+
+        LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+
+
+        options = new MarkerOptions().position(latLng).title("Vehicle location").icon(BitmapDescriptorFactory.fromResource(R.drawable.van));
+        if(marker!=null){
+            marker.remove();
+        }
+        marker = mMap.addMarker(options);
     }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        // update the main content by replacing fragments
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.mapuser, PlaceholderFragment.newInstance(position + 1))
+                .commit();
+    }
+
+    public void onSectionAttached(int number) {
+        switch (number) {
+            case 1:
+                mTitle = getString(R.string.title_section1_for_user);
+                break;
+            case 2:
+                mTitle = getString(R.string.title_section2_for_user);
+                break;
+            case 3:
+                mTitle = getString(R.string.title_section3_for_user);
+                break;
+            case 4:
+                mTitle = getString(R.string.title_section4_for_user);
+                break;
+            case 5:
+                mTitle = getString(R.string.title_section5_for_user);
+                break;
+        }
+    }
+
+    public void restoreActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(mTitle);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            // Only show items in the action bar relevant to this screen
+            // if the drawer is not showing. Otherwise, let the drawer
+            // decide what to show in the action bar.
+            getMenuInflater().inflate(R.menu.main_user, menu);
+            restoreActionBar();
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static PlaceholderFragment newInstance(int sectionNumber) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        public PlaceholderFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main_user, container, false);
+            return rootView;
+        }
+
+        @Override
+        public void onAttach(Activity activity) {
+            super.onAttach(activity);
+            ((MapActivityUser) activity).onSectionAttached(
+                    getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+    }
+
 }

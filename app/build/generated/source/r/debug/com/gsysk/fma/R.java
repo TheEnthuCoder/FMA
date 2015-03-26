@@ -1371,20 +1371,24 @@ containing a value of this type.
         public static final int activity_admin_button=0x7f030018;
         public static final int activity_login=0x7f030019;
         public static final int activity_main=0x7f03001a;
-        public static final int activity_map_activity_user=0x7f03001b;
-        public static final int activity_maps=0x7f03001c;
-        public static final int activity_vehicle_tracking=0x7f03001d;
-        public static final int activity_view_routes=0x7f03001e;
-        public static final int fragment_main=0x7f03001f;
-        public static final int fragment_navigation_drawer=0x7f030020;
-        public static final int listview_dialog_layout=0x7f030021;
-        public static final int support_simple_spinner_dropdown_item=0x7f030022;
+        public static final int activity_main_user=0x7f03001b;
+        public static final int activity_map_activity_user=0x7f03001c;
+        public static final int activity_maps=0x7f03001d;
+        public static final int activity_vehicle_tracking=0x7f03001e;
+        public static final int activity_view_routes=0x7f03001f;
+        public static final int fragment_main=0x7f030020;
+        public static final int fragment_main_user=0x7f030021;
+        public static final int fragment_navigation_drawer=0x7f030022;
+        public static final int fragment_navigation_drawer_user=0x7f030023;
+        public static final int listview_dialog_layout=0x7f030024;
+        public static final int support_simple_spinner_dropdown_item=0x7f030025;
     }
     public static final class menu {
         public static final int global=0x7f0e0000;
         public static final int main=0x7f0e0001;
-        public static final int menu_admin_button=0x7f0e0002;
-        public static final int menu_login=0x7f0e0003;
+        public static final int main_user=0x7f0e0002;
+        public static final int menu_admin_button=0x7f0e0003;
+        public static final int menu_login=0x7f0e0004;
     }
     public static final class raw {
         public static final int gtm_analytics=0x7f050000;
@@ -1460,15 +1464,21 @@ containing a value of this type.
         public static final int store_picture_title=0x7f0c0043;
         public static final int title_activity_map_activity_user=0x7f0c0044;
         public static final int title_section1=0x7f0c0045;
-        public static final int title_section2=0x7f0c0046;
-        public static final int title_section3=0x7f0c0047;
-        public static final int title_section4=0x7f0c0048;
-        public static final int title_section5=0x7f0c0049;
-        public static final int title_section6=0x7f0c004a;
-        public static final int trackVehicles=0x7f0c004b;
-        public static final int usernamehint=0x7f0c004c;
-        public static final int viewRouteDetails=0x7f0c004d;
-        public static final int wallet_buy_button_place_holder=0x7f0c004e;
+        public static final int title_section1_for_user=0x7f0c0046;
+        public static final int title_section2=0x7f0c0047;
+        public static final int title_section2_for_user=0x7f0c0048;
+        public static final int title_section3=0x7f0c0049;
+        public static final int title_section3_for_user=0x7f0c004a;
+        public static final int title_section4=0x7f0c004b;
+        public static final int title_section4_for_user=0x7f0c004c;
+        public static final int title_section5=0x7f0c004d;
+        public static final int title_section5_for_user=0x7f0c004e;
+        public static final int title_section6=0x7f0c004f;
+        public static final int title_section6_for_user=0x7f0c0050;
+        public static final int trackVehicles=0x7f0c0051;
+        public static final int usernamehint=0x7f0c0052;
+        public static final int viewRouteDetails=0x7f0c0053;
+        public static final int wallet_buy_button_place_holder=0x7f0c0054;
     }
     public static final class style {
         /** 

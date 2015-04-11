@@ -80,10 +80,7 @@ public class PhoneFunctions {
         return (wifi.isWifiEnabled());
     }
 
-    public static void enableWifi(Activity curActivity, boolean state) {
-        WifiManager wifi = (WifiManager) curActivity.getSystemService(Context.WIFI_SERVICE);
-        wifi.setWifiEnabled(state);
-    }
+
 
     public static boolean isInternetEnabled(Activity curActivity) {
         if ((PhoneFunctions.isNetworkAvailable(curActivity) && PhoneFunctions.isWifiEnabled(curActivity))
@@ -94,6 +91,10 @@ public class PhoneFunctions {
         }
     }
 
+    public static void enableWifi(Activity curActivity, boolean state) {
+        WifiManager wifi = (WifiManager) curActivity.getSystemService(Context.WIFI_SERVICE);
+        wifi.setWifiEnabled(state);
+    }
 
     public static void storeInPrivateSharedPreferences(Activity curActivity, String key, String value) {
         SharedPreferences pref = curActivity.getSharedPreferences("saveDetails", Context.MODE_PRIVATE);

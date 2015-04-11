@@ -20,7 +20,7 @@ public class RouteFormulator {
 
     public RouteFormulator(String routeDetails)
     {
-     //   System.out.println(routeDetails);
+        System.out.println("Inside routeformulator : "+routeDetails);
         String [] parts = routeDetails.split(" , ");
 
         //Source Details
@@ -30,22 +30,32 @@ public class RouteFormulator {
         //Drop Points
 
         dropPoints = new RouteMarker[parts.length-1][];
-        numRoutes = parts.length-2;
-        for(int i=0;i<parts.length-2;i++)
+        numRoutes = parts.length-1;
+        for(int i=0;i<parts.length-1;i++)
         {
+            System.out.println("Index  : "+i);
+            if(parts[i+1].endsWith(" ; "))
+            {
+                parts[i+1] = parts[i+1].substring(0,parts[i+1].length()-3);
+            }
+            else if(parts[i+1].endsWith(" ;  "))
+            {
+                parts[i+1] = parts[i+1].substring(0,parts[i+1].length()-4);
+            }
             String [] dropPointParts = parts[i+1].split(" ; ");
             dropPoints[i] = new RouteMarker[dropPointParts.length];
 
             for(int j=0;j<dropPointParts.length;j++)
             {
+
                 String [] dropPointSubParts = dropPointParts[j].split(" / ");
                 dropPoints[i][j]  = new RouteMarker(dropPointSubParts);
-              //  display(dropPoints[i][j]);
+                display(dropPoints[i][j]);
             }
         }
 
 
-
+        /*
         //Sort them in order, based on their sequence numbers
         for(int i=0;i<parts.length-2;i++)
         {
@@ -62,7 +72,7 @@ public class RouteFormulator {
                 dropPoints[i][j] = routeMarkerList.get(j);
             }
         }
-
+    */
 
 
 /*
@@ -105,5 +115,8 @@ public class RouteFormulator {
         System.out.println("SequenceNum : "+r.sequenceNum);
         System.out.println("Latitude : "+r.latitude);
         System.out.println("Longitude : "+r.longitude);
+        System.out.println("Location ID : "+r.dropPointID);
     }
+
+
 }

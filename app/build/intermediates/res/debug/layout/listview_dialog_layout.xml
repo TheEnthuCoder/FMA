@@ -5,7 +5,7 @@
     android:orientation="horizontal"
 >
    
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -23,6 +23,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15dp"
+            android:layout_below="@+id/mainTxt"
         />
-    </LinearLayout>
+
+        <TextView
+            android:id="@+id/subTxt2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+           android:layout_toRightOf="@+id/mainTxt"
+
+            android:textColor="#0000ff"
+            android:textSize="15dp"
+            />
+    </RelativeLayout>
 </LinearLayout><!-- From: file:/C:/Users/lenovo/AndroidstudioProjects/FMA/app/src/main/res/layout/listview_dialog_layout.xml -->

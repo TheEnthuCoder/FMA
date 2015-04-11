@@ -83,11 +83,7 @@
 </string-array>
 
     <string name="title_activity_map_activity_user">Map</string>
-
-
-
-
-
+    <string name="resetDeliveryStatus">Reset \nOptions</string>
 
 
 </resources>

@@ -21,11 +21,9 @@ import com.gsysk.constants.ConstantValues;
 import com.gsysk.fma.R;
 import com.gsysk.parseCloudServices.CloudInteractor;
 import com.gsysk.phoneUtils.PhoneFunctions;
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-
-import java.util.HashMap;
+import com.parse.Parse;
+import com.parse.ParseACL;
+import com.parse.ParseUser;
 
 
 public class LoginActivity extends ActionBarActivity {
@@ -41,6 +39,16 @@ public class LoginActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Parse.initialize(getApplicationContext(), ConstantValues.APP_KEY, ConstantValues.CLIENT_KEY);
+        //      Parse.initialize(curActivity, "XdzcMtL72Ho3GmVBbCaEY7pzdg8cGXF1EkyTbdUw", "mpsFnnEuQURv0KzH4dPy0xtV8vN8gZdRTSzCDoix");
+
+
+        ParseUser.enableAutomaticUser();
+        ParseACL defaultACL = new ParseACL();
+        // Optionally enable public read access.
+        // defaultACL.setPublicReadAccess(true);
+        ParseACL.setDefaultACL(defaultACL, true);
 
        loginbtn = (Button)findViewById(R.id.loginbtn);
         clearbtn = (Button)findViewById(R.id.clrBtn);

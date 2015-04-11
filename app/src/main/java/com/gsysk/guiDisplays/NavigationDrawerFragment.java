@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,8 +21,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.gsysk.constants.ConstantValues;
 import com.gsysk.fma.R;
+import com.gsysk.phoneUtils.PhoneFunctions;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -95,6 +99,23 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if(position==0){
+                    Log.d("MyApp", "List item zero clicked");
+                    getRoute();
+                }else if(position==1){
+                    Log.d("MyApp","List item 1 clicked");
+                    getStopdetails();
+                }else if(position==2){
+                    getAdminDetails();
+                }else if(position==3){
+                    getUserDetails();
+                }else if(position==4){
+                    CheckConfirm();
+                }else if(position==5){
+                    logout();
+                }
+
                 selectItem(position);
             }
         });
@@ -284,4 +305,77 @@ public class NavigationDrawerFragment extends Fragment {
          */
         void onNavigationDrawerItemSelected(int position);
     }
+
+
+    public void getRoute(){
+        Toast.makeText(getActivity(),
+                "Get Route Details", Toast.LENGTH_LONG)
+                .show();
+    }
+
+    public void getStopdetails(){
+        Toast.makeText(getActivity(),
+                "Get Droppoint Details", Toast.LENGTH_LONG)
+                .show();
+    }
+
+    public void getAdminDetails(){
+        Toast.makeText(getActivity(),
+                "Get admin Details", Toast.LENGTH_LONG)
+                .show();
+
+        String content = PhoneFunctions.getFromPrivateSharedPreferences(getActivity(), "adminForDriver");
+        if(content==null || content.equals("Not Found"))
+        {
+            ToastMessageHelper.displayLongToast(getActivity(), ConstantValues.PLEASE_TRY_AGAIN);
+        }
+        else
+        {
+            String titleMessage = "";
+
+            titleMessage = "Admins : ";
+
+
+            AlertDialogHelper createdDialog = new AlertDialogHelper(getActivity(), titleMessage);
+            createdDialog.createListAlertDialog(content);
+        }
+    }
+
+    public void getUserDetails(){
+        Toast.makeText(getActivity(),
+                "Get user Details", Toast.LENGTH_LONG)
+                .show();
+
+        String content = PhoneFunctions.getFromPrivateSharedPreferences(getActivity(), "UsersToDriver");
+        if(content==null || content.equals("Not Found"))
+        {
+            ToastMessageHelper.displayLongToast(getActivity(), ConstantValues.PLEASE_TRY_AGAIN);
+        }
+        else
+        {
+            String titleMessage = "";
+
+            titleMessage = "Users : ";
+
+
+            AlertDialogHelper createdDialog = new AlertDialogHelper(getActivity(), titleMessage);
+            createdDialog.createListAlertDialog(content);
+        }
+
+    }
+
+    public void CheckConfirm(){
+        Toast.makeText(getActivity(),
+                "Check Confirmation", Toast.LENGTH_LONG)
+                .show();
+    }
+
+
+
+    public void logout(){
+        Toast.makeText(getActivity(),
+                "Check Confirmation", Toast.LENGTH_LONG)
+                .show();
+    }
+
 }

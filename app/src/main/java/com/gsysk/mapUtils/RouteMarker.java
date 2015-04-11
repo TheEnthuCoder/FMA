@@ -10,6 +10,7 @@ public class RouteMarker implements Comparable<RouteMarker>
     public int sequenceNum;
     public float latitude;
     public float longitude;
+    public int dropPointID;
 
     public RouteMarker(String [] parts)
     {
@@ -18,7 +19,7 @@ public class RouteMarker implements Comparable<RouteMarker>
         this.sequenceNum = Integer.parseInt(parts[2]);
         this.latitude = Float.parseFloat(parts[3]);
         this.longitude = Float.parseFloat(parts[4]);
-
+        this.dropPointID = Integer.parseInt(parts[5]);
     }
 
     @Override

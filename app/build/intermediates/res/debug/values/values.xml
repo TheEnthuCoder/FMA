@@ -274,6 +274,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="passwordhint">Enter password</string>
     <string name="remember">Remember me</string>
+    <string name="resetDeliveryStatus">Reset \nOptions</string>
     <!-- From: file:/C:/Users/lenovo/AndroidstudioProjects/FMA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/res/values/admob_strings.xml -->
     <eat-comment/>
     <string name="store_picture_message">"Allow Ad to store image in Picture gallery?"</string>

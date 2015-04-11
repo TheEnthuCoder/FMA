@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.gsysk.activity.AdminButtonActivity;
 import com.gsysk.activity.MapActivityUser;
@@ -38,8 +39,10 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
 
     String status = "";
     String roleType="";
-
+    Boolean showProgress = true;
     Boolean skipLogin = false;
+
+    String loginid="";
     public CloudParserAsyncTask(Activity activity,String username,String password)
     {
       //  queryType = type;
@@ -51,13 +54,14 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
       //  this.parseObjectList = parseObjectList;
         this.pullAllService = pullAllService;
     }
-    public CloudParserAsyncTask(Activity activity,String roleType)
+    public CloudParserAsyncTask(Activity activity,String roleType,boolean showProgress)
     {
         //  queryType = type;
         curActivity = activity;
         skipLogin = true;
         this.roleType = roleType.split(" : ")[0];
         this.username = roleType.split(" : ")[1];
+        this.showProgress = showProgress;
     }
     protected Void doInBackground(Void... params)
     {
@@ -81,6 +85,7 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
                         String []role = status.split(":");
                         status = role[0];
                         roleType = role[1];
+                        loginid = role[2];
                     }
                     else
                     {
@@ -119,8 +124,9 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
 
         pullAllService = new CloudInteractor(curActivity);
 
-        pullAllService.initialize(ConstantValues.APP_KEY,ConstantValues.CLIENT_KEY);
-        progressDialog = ProgressDialog.show(curActivity, "",ConstantValues.LOGIN_PROGRESS, true);
+       //  pullAllService.initialize(ConstantValues.APP_KEY,ConstantValues.CLIENT_KEY);
+        if(showProgress)
+             progressDialog = ProgressDialog.show(curActivity, "",ConstantValues.LOGIN_PROGRESS, true);
 
 
         super.onPreExecute();
@@ -135,9 +141,11 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void result) {
         // Put the list of parseObjectsList.gatewaylist into the list view
 
+        if(showProgress)
+          progressDialog.dismiss();
 
-        progressDialog.dismiss();
-
+        if(!showProgress)
+            ToastMessageHelper.displayLongToast(curActivity,"Data Refreshed");
         if(status.equals("Success"))
         {
             if(roleType.equals(ConstantValues.ROLE_ADMIN)&&!skipLogin)
@@ -152,7 +160,7 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
 
                 skipLogin = false;
             }
-            else if(roleType.equals(ConstantValues.ROLE_USER))
+            else if(roleType.equals(ConstantValues.ROLE_USER)&&!skipLogin)
             {
                 Intent intent = new Intent(curActivity.getApplicationContext(), MapActivityUser.class);
                 Bundle b = new Bundle();
@@ -163,7 +171,7 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
 
                 skipLogin = false;
             }
-            else if(roleType.equals(ConstantValues.ROLE_DRIVER))
+            else if(roleType.equals(ConstantValues.ROLE_DRIVER)&&!skipLogin)
             {
                 Intent intent = new Intent(curActivity.getApplicationContext(), MapsDriverActivity.class);
                 Bundle b = new Bundle();
@@ -193,6 +201,7 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
         curActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
                 progressDialog.setMessage(message);
             }
         });
@@ -202,23 +211,46 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
     {
         HashMap<String, Object> input = new HashMap<String, Object>();
 
+        if(showProgress)
         updateProgressDialogWith(ConstantValues.CONTENT_PROGRESS);
-        response = pullAllService.getDriverDetails(input);
+
+        input.put("Name",username);
+
+
+        response = pullAllService.getAllDetails(input);
+        String []parts  = null;
+        String clusterDet = "";
         if(response.startsWith("Success : "))
         {
-            PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"ListOfDrivers",response.substring(10));
+            String resp = response.substring(10);
+            System.out.println("Concatenated response : "+resp);
+            parts = resp.split(" \\| ");
+            PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"ListOfDrivers",parts[0]);
+            PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"ListOfContacts", parts[1]);
+            //clusterDet = parts[2];
+            PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"NoOfClusters",parts[2]);
+
+            String []pointsResponse= parts[3].split("\\.,");
+           response = "";
+            for(int x =0;x<pointsResponse.length;x++)
+            {
+
+                response = response.concat(pointsResponse[x]+ " # ");
+            }
+
+            PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"DropPointList",response);
 
         }
 
-        response="";
+      //  response="";
        // updateProgressDialogWith(ConstantValues.USER_PROGRESS);
-        response = pullAllService.getContactDetails(input);
+      /*  response = pullAllService.getContactDetails(input);
         if(response.startsWith("Success : "))
         {
             PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"ListOfContacts",response.substring(10));
         }
         response="";
-
+*/
         curActivity.runOnUiThread(new Runnable()
         {
 
@@ -227,24 +259,26 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
                 System.out.println(PhoneFunctions.getFromPrivateSharedPreferences(curActivity,"UserName"));
             }
         });
-        input.put("Name",username);
 
-        response = pullAllService.getClusterDetails(input);
+
+      /*  response = pullAllService.getClusterDetails(input);
         if(response.startsWith("Success : "))
         {
             response = response.substring(10);
         }
 
+*/
+       // input.clear();
 
-        input.clear();
-
-        String responseCopy = new String(response);
+        /*String responseCopy = new String(clusterDet);
         response="";
         final String [] clusters = responseCopy.split(" # ");
         PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"NoOfClusters",String.valueOf(clusters.length));
         for(int x=0;x<clusters.length;x++)
         {
             //Getting all drop points of the given cluster, according to various routes belonging to that cluster
+            System.out.println("Source : "+ clusters[x].split(" : ")[0]);
+            System.out.println("Routes : "+ clusters[x].split(" : ")[1]);
             input.put("Source",clusters[x].split(" : ")[0]);
             final String source = clusters[x].split(" : ")[0];
             final String routes = clusters[x].split(" : ")[1];
@@ -272,8 +306,8 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
             input.clear();
         }
 
-
-       // displayToastInUi(response);
+*/
+      // displayToastInUi(response);
         curActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -281,23 +315,85 @@ public class CloudParserAsyncTask extends AsyncTask<Void, Void, Void> {
             }
         });
 
-        if(response.startsWith("Success : "))
+        /*if(response.startsWith("Success : "))
         {
             PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"DropPointList",response.substring(10));
         }
+        */
         response="";
     }
 
     private void doContactTasks()
     {
+        HashMap<String, Object> input = new HashMap<String, Object>();
+        input.put("loginid",loginid);
+        updateProgressDialogWith(ConstantValues.CONTENT_PROGRESS);
+        response = pullAllService.getDriverForUser(input);
+        String resp1 = response.split("#")[0];
+        String resp2 = response.split("#")[1];
+        if(resp1.startsWith("Success : "))
+        {
+            Log.d("MyApp", "Store in shared prifferenece " + resp1);
+            PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"driverForUser",resp1.substring(10));
+
+        }
+
+        if(resp2.startsWith("Success : "))
+        {
+            Log.d("MyApp","Store in shared prifferenece "+resp2);
+            PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"adminForUser",resp2.substring(10));
+
+        }
+
+        response="";
+
+
+
 
     }
 
     private void doDriverTasks()
     {
+        HashMap<String, Object> input = new HashMap<String, Object>();
+        input.put("loginid",loginid);
+        updateProgressDialogWith(ConstantValues.CONTENT_PROGRESS);
+        response = pullAllService.getDetailsToDriver(input);
+
+        String resp1 = response.split("#")[0];
+        String resp2 = response.split("#")[1];
+        String resp3 = response.split(("#"))[2];
+        String resp4 = response.split("#")[3];
+
+        if(resp1.startsWith("Success : "))
+        {
+            Log.d("MyApp","Store in shared prifferenece "+resp1);
+            PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"UsersToDriver",resp1.substring(10));
+
+        }
+
+        if(resp2.startsWith("Success : "))
+        {
+            Log.d("MyApp","Store in shared prifferenece "+resp2);
+            PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"adminForDriver",resp2.substring(10));
+
+        }
+        if(resp3.startsWith("Success : "))
+        {
+            Log.d("MyApp","Store in shared prifferenece "+resp3);
+            PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"routeForDriver",resp3.substring(10));
+
+        }
+        if(resp4.startsWith("Success : "))
+        {
+            Log.d("MyApp","Store in shared prifferenece "+resp4);
+            PhoneFunctions.storeInPrivateSharedPreferences(curActivity,"SourceToDriver",resp4.substring(10));
+
+        }
+
+        response="";
+
 
     }
-
     private String verifyLogin()
     {
         HashMap<String,Object> loginDetails = new HashMap<String, Object>();

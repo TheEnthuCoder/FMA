@@ -31,7 +31,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.gsysk.fma.R;
 import com.gsysk.guiDisplays.NavigationDrawerFragment;
 import com.gsysk.phoneUtils.GPSTracker;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;

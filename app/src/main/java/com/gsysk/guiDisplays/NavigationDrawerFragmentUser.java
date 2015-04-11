@@ -23,7 +23,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.gsysk.constants.ConstantValues;
 import com.gsysk.fma.R;
+import com.gsysk.phoneUtils.PhoneFunctions;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -146,11 +148,43 @@ public class NavigationDrawerFragmentUser extends Fragment {
         Toast.makeText(getActivity(),
                 "Get Admin Details", Toast.LENGTH_LONG)
                 .show();
+
+        String content = PhoneFunctions.getFromPrivateSharedPreferences(getActivity(), "adminForUser");
+        if(content==null || content.equals("Not Found"))
+        {
+            ToastMessageHelper.displayLongToast(getActivity(), ConstantValues.PLEASE_TRY_AGAIN);
+        }
+        else
+        {
+            String titleMessage = "";
+
+            titleMessage = "Admin : ";
+
+
+            AlertDialogHelper createdDialog = new AlertDialogHelper(getActivity(), titleMessage);
+            createdDialog.createListAlertDialog(content);
+        }
     }
     public void getDriverDetails(){
         Toast.makeText(getActivity(),
                 "Get Driver Details", Toast.LENGTH_LONG)
                 .show();
+
+        String content = PhoneFunctions.getFromPrivateSharedPreferences(getActivity(), "driverForUser");
+        if(content==null || content.equals("Not Found"))
+        {
+            ToastMessageHelper.displayLongToast(getActivity(), ConstantValues.PLEASE_TRY_AGAIN);
+        }
+        else
+        {
+            String titleMessage = "";
+
+            titleMessage = "Driver : ";
+
+
+            AlertDialogHelper createdDialog = new AlertDialogHelper(getActivity(), titleMessage);
+            createdDialog.createListAlertDialog(content);
+        }
     }
     public void getDropPointDetails(){
         Toast.makeText(getActivity(),

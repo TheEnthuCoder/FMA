@@ -1,6 +1,7 @@
 package com.gsysk.parseCloudServices;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.gsysk.guiDisplays.ToastMessageHelper;
 import com.parse.FunctionCallback;
@@ -35,6 +36,17 @@ public class CloudInteractor {
     boolean canContinue_gD = false;
     boolean canContinue_cladmin = false;
     boolean canContinue_cldetails = false;
+    boolean canContinue_ddetails = false;
+    boolean canContinue_admdetails = false;
+    boolean canContinue_got_details = false;
+    boolean canContinue_admdetailstodriver = false;
+    boolean canContinueto_routedetails = false;
+    boolean canContinue_got_routedetails = false;
+    boolean canContinue_got_sourcedetails = false;
+
+    private String resp;
+    private String temp;
+
     public CloudInteractor(Activity activity)
     {
         curActivity = activity;
@@ -52,13 +64,13 @@ public class CloudInteractor {
         ParseACL.setDefaultACL(defaultACL, true);
     }
 
-    public String getDriverDetails(HashMap<String,Object> params)
+    public String getAllDetails(HashMap<String,Object> params)
     {
 
         try
         {
 
-            ParseCloud.callFunctionInBackground("getDriverDetails", params, new FunctionCallback<String>() {
+            ParseCloud.callFunctionInBackground("getAllDetails", params, new FunctionCallback<String>() {
                 public void done(String value, ParseException e) {
                     if (e == null) {
 
@@ -353,4 +365,277 @@ public class CloudInteractor {
 
 
     }
+
+    public String getDriverForUser(HashMap<String,Object> params){
+
+        try
+        {
+
+            ParseCloud.callFunctionInBackground("getdriveridforuser", params, new FunctionCallback<String>() {
+                public void done(String value, ParseException e) {
+                    if (e == null) {
+
+                        response = "Success : "+value;
+                    } else {
+                        System.out.println("Got error");
+                        response = "Error : "+e.getMessage().toString();
+                    }
+                    canContinue_ddetails = true;
+                }
+
+            });
+
+            while(!canContinue_ddetails)
+            {
+
+            }
+            canContinue_ddetails = false;
+
+
+
+            String data = response.split(" ; ")[0];
+            String []driver_ids = data.split(" : ");
+            String driver_id = driver_ids[1];
+            String admin_ids = driver_ids[2];
+            Log.d("MyApp", admin_ids);
+
+            Log.d("MyApp",driver_id);
+            //HashMap<String, Object> params = new HashMap<String, Object>();
+            params.remove("loginid");
+            driver_id=driver_id.trim();
+            params.put("driver_id",Integer.parseInt(driver_id));
+
+            response="";
+
+            ParseCloud.callFunctionInBackground("getdriverforuser", params, new FunctionCallback<String>() {
+                public void done(String value, ParseException e) {
+                    if (e == null) {
+
+                        resp = "Success : "+value;
+                        canContinue_admdetails = true;
+                    } else {
+                        System.out.println("Got error");
+                        resp = "Error : "+e.getMessage().toString();
+                    }
+
+                }
+
+            });
+
+            while(!canContinue_admdetails)
+            {
+
+            }
+            canContinue_admdetails = false;
+
+
+            params.put("adminIdArray",admin_ids);
+
+            //response="";
+            Log.d("MyApp","Here");
+            ParseCloud.callFunctionInBackground("getadminstouser", params, new FunctionCallback<String>() {
+                public void done(String value, ParseException e) {
+                    if (e == null) {
+
+                        resp = resp.concat("#Success : "+value);
+                        Log.d("MyApp",resp);
+
+                        canContinue_got_details = true;
+                    } else {
+                        System.out.println("Got error");
+                        resp = "Error : "+e.getMessage().toString();
+                    }
+
+                }
+
+            });
+
+            while(!canContinue_got_details)
+            {
+
+            }
+            canContinue_got_details = false;
+
+
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        Log.d("MyApp",resp);
+
+        return resp;
+
+    }
+
+
+    public String getDetailsToDriver(HashMap<String,Object> params){
+
+        try
+        {
+
+            ParseCloud.callFunctionInBackground("getdetailstoDriver", params, new FunctionCallback<String>() {
+                public void done(String value, ParseException e) {
+                    if (e == null) {
+
+                        response = "Success : "+value;
+                    } else {
+                        System.out.println("Got error");
+                        response = "Error : "+e.getMessage().toString();
+                    }
+                    canContinue_ddetails = true;
+                }
+
+            });
+
+            while(!canContinue_ddetails)
+            {
+
+            }
+            canContinue_ddetails = false;
+
+
+
+            String data = response.split(" ; ")[0];
+            String userids = data.split(" : ")[1];
+            String admin_ids = data.split(" : ")[2];
+            String drop_pts = data.split(" : ")[3];
+            String routeid = data.split(" : ")[4];
+            String clusterid = data.split(" : ")[5];
+
+            Log.d("MyApp",data);
+            Log.d("MyApp",userids);
+            Log.d("MyApp",admin_ids);
+            Log.d("MyApp",drop_pts);
+            Log.d("MyApp",routeid);
+            Log.d("MyApp",clusterid);
+            //HashMap<String, Object> params = new HashMap<String, Object>();
+            //params.remove("loginid");
+            //driver_id=driver_id.trim();
+            params.put("uidsArray",userids);
+            params.put("adminIdArray",admin_ids);
+            params.put("dpidsArray",drop_pts);
+            params.put("cluster_id",Integer.parseInt(clusterid));
+
+            response="";
+
+            ParseCloud.callFunctionInBackground("getuserstodriver", params, new FunctionCallback<String>() {
+                public void done(String value, ParseException e) {
+                    if (e == null) {
+
+                        resp = "Success : "+value;
+                        canContinue_admdetailstodriver = true;
+                    } else {
+                        System.out.println("Got error");
+                        resp = "Error : "+e.getMessage().toString();
+                    }
+                }
+
+            });
+
+            while(!canContinue_admdetailstodriver)
+            {
+
+            }
+            canContinue_admdetailstodriver = false;
+
+            //response="";
+            //Log.d("MyApp","Here");
+            ParseCloud.callFunctionInBackground("getadminstodriver", params, new FunctionCallback<String>() {
+                public void done(String value, ParseException e) {
+                    if (e == null) {
+
+                        resp = resp.concat("#Success : "+value);
+                        //Log.d("MyApp",resp);
+
+                        canContinueto_routedetails = true;
+                    } else {
+                        System.out.println("Got error");
+                        resp = "Error : "+e.getMessage().toString();
+                    }
+
+                }
+
+            });
+
+            while(!canContinueto_routedetails)
+            {
+
+            }
+            canContinueto_routedetails = false;
+
+            ParseCloud.callFunctionInBackground("getSourceNametoDriver", params, new FunctionCallback<String>() {
+                public void done(String value, ParseException e) {
+                    if (e == null) {
+
+                        //resp = resp.concat("#Success : "+value);
+                        temp = "Success : "+value;
+
+                        Log.d("MyApp",temp);
+
+                        canContinue_got_sourcedetails = true;
+                    } else {
+                        System.out.println("Got error");
+                        resp = "Error : "+e.getMessage().toString();
+                    }
+
+                }
+
+            });
+
+            while(!canContinue_got_sourcedetails)
+            {
+
+            }
+            canContinue_got_sourcedetails = false;
+
+            String src = temp.split(" ; ")[0];
+            String srcName = src.split(" : ")[1];
+
+            Log.d("MyApp",src);
+            Log.d("MyApp","SRC NAME");
+            Log.d("MyApp",srcName);
+
+            params.put("srcName",srcName);
+
+            ParseCloud.callFunctionInBackground("getdriversRoute", params, new FunctionCallback<String>() {
+                public void done(String value, ParseException e) {
+                    if (e == null) {
+
+                        resp = resp.concat("#Success : "+value);
+                        //Log.d("MyApp",resp);
+
+                        canContinue_got_routedetails = true;
+                    } else {
+                        System.out.println("Got error");
+                        resp = "Error : "+e.getMessage().toString();
+                    }
+
+                }
+
+            });
+
+            while(!canContinue_got_routedetails)
+            {
+
+            }
+            canContinue_got_routedetails = false;
+
+
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        Log.d("MyApp",resp);
+
+        return resp;
+
+    }
 }
+
+

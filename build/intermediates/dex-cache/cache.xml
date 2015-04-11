@@ -9,20 +9,6 @@
         <dex dex="C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.0-d656e9c4cea0399fe1d9c2c52e4dbfc2d1d4ee3f.jar" />
     </item>
     <item
-        jar="C:\Users\lenovo\AndroidstudioProjects\FMA\app\libs\bolts-android-1.1.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e61e3dfc57eaa5c97f9e7061db5608fc7d02d39e">
-        <dex dex="C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.3-ec7556189219c0eb924d1df2deb9461dcfbc9432.jar" />
-    </item>
-    <item
-        jar="C:\Users\lenovo\AndroidstudioProjects\FMA\app\libs\Parse-1.7.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="87c45f9f66da531a65f065ee32f603c7e6db1528">
-        <dex dex="C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\debug\Parse-1.7.1-d9be35ef585d07ebce1b83bb69f57167c3ed321e.jar" />
-    </item>
-    <item
         jar="C:\Users\lenovo\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.0\support-annotations-21.0.0.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -44,11 +30,25 @@
         <dex dex="C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\debug\classes-354e9c272f58308bfaa38299c6ebe4f783cd1436.jar" />
     </item>
     <item
+        jar="C:\Users\lenovo\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-android\1.2.0\6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd\bolts-android-1.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
+        <dex dex="C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\debug\bolts-android-1.2.0-2dcc4fe939471f6a32ee60a6f56ce39d2e599a36.jar" />
+    </item>
+    <item
         jar="C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.0\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="686344a780033e4ba22b926cd225f8d4941247e6">
         <dex dex="C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\debug\classes-d4b30cabb4e524153b92b2d0f9560a601caeb24b.jar" />
+    </item>
+    <item
+        jar="C:\Users\lenovo\AndroidstudioProjects\FMA\app\libs\Parse-1.9.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="5811138d4e6cb9d45030e133ef1a61b935154c3a">
+        <dex dex="C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\debug\Parse-1.9.0-254629bdfcfc73c17609386fe790030df18840a4.jar" />
     </item>
 
 </items>

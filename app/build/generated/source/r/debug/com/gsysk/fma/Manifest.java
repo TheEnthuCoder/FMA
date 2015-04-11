@@ -9,6 +9,12 @@ package com.gsysk.fma;
 
 public final class Manifest {
     public static final class permission {
+        /** 
+      IMPORTANT: Change "com.parse.starter.permission.C2D_MESSAGE" in the lines below
+      to match your app's package name + ".permission.C2D_MESSAGE".
+    
+         */
+        public static final String C2D_MESSAGE="com.gsysk.fma.permission.C2D_MESSAGE";
         public static final String MAPS_RECEIVE="in.wptrafficanalyzer.locationroutedirectionmapv2.permission.MAPS_RECEIVE";
     }
 }

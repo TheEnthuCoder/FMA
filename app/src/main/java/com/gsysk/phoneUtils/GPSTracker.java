@@ -130,6 +130,7 @@ public class GPSTracker extends Service implements LocationListener {
                         }
                     }
                 }
+
                 storeLocationInCloud(latitude,longitude);
             }
 
@@ -349,4 +350,14 @@ public class GPSTracker extends Service implements LocationListener {
             handler.postDelayed(this, 10000); // 10 seconds
         }
     };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        handler.removeCallbacks(sendUpdatesToUI);
+
+
+
+    }
 }

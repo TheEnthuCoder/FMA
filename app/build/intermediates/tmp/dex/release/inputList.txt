@@ -1,0 +1,8 @@
+C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\classes\release
+C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\release\support-annotations-21.0.0-1292d6b54d4d71d399e354c9c87490ec9154d942.jar
+C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\release\bolts-android-1.2.0-2dcc4fe939471f6a32ee60a6f56ce39d2e599a36.jar
+C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\release\internal_impl-21.0.0-d656e9c4cea0399fe1d9c2c52e4dbfc2d1d4ee3f.jar
+C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\release\classes-c2580586d138f6e7f703d4f4b5b7ac49b99006b3.jar
+C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\release\Parse-1.9.0-254629bdfcfc73c17609386fe790030df18840a4.jar
+C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\release\classes-d4b30cabb4e524153b92b2d0f9560a601caeb24b.jar
+C:\Users\lenovo\AndroidstudioProjects\FMA\app\build\intermediates\pre-dexed\release\classes-354e9c272f58308bfaa38299c6ebe4f783cd1436.jar

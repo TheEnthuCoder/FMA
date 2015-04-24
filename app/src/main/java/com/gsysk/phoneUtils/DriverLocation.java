@@ -21,12 +21,15 @@ public class DriverLocation  extends Service {
 
 
     public static final String BROADCAST_ACTION  = "MY_ACTION";
-    Location location; // location
-    private double latitude; // latitude
-    private double longitude; // longitude
+    Location [] location; // location
+    private double [] latitude; // latitude
+    private double [] longitude; // longitude
     Intent intent;
     private final Handler handler = new Handler();
     String response = "";
+    String routeNumbers="";
+    int count = 0;
+    private boolean flag = false;
 
     public DriverLocation() {
 
@@ -42,7 +45,7 @@ public class DriverLocation  extends Service {
     }
 
 
-    public Location getLocation(){
+    public Location [] getLocation(){
 
         /*ParseQuery<ParseObject> query = ParseQuery.getQuery("vehiclelocation");
         List<ParseObject> vehicleloc;
@@ -63,17 +66,31 @@ public class DriverLocation  extends Service {
         */
 
         HashMap<String,Object> params = new HashMap<String,Object>();
-        params.put("vehicleid",1);
+        System.out.println("Route Numbers : "+routeNumbers.substring(0,routeNumbers.length()-3));
+        params.put("RouteNumbers",routeNumbers.substring(0,routeNumbers.length()-3));
 
-        ParseCloud.callFunctionInBackground("getDriverLocation",params,new FunctionCallback<String>() {
+
+
+        ParseCloud.callFunctionInBackground("getDriverLocationForRoutes",params,new FunctionCallback<String>() {
 
             public void done(String value, ParseException e) {
                 if (e == null) {
                     response = value;
                     Log.d("MyApp",response);
-                    String[] loc = response.split(":");
-                    latitude = Double.parseDouble(loc[1]);
-                    longitude = Double.parseDouble(loc[2]);
+                    String [] parts = response.split(" ; ");
+
+                    latitude = new double[parts.length];
+                    longitude = new double[parts.length];
+                    Log.i("Sequence","Inside bg function");
+                    for(int i=0;i<parts.length;i++)
+                    {
+                        String[] loc = parts[i].split(" : ");
+                        latitude[i] = Double.parseDouble(loc[0]);
+                        longitude[i] = Double.parseDouble(loc[1]);
+                    }
+
+                    count= parts.length;
+
                     //Log.d("MyApp",loc[0]);
                     //Log.d("MyApp",loc[1]);
                     //Log.d("MyApp",loc[2]);
@@ -82,9 +99,13 @@ public class DriverLocation  extends Service {
                     response = "Error : "+e.getMessage().toString();
 
                 }
+
             }
         });
 
+
+        Log.i("Sequence","Inside main thread of driver loc");
+        response = "";
         return location;
 
 
@@ -94,13 +115,16 @@ public class DriverLocation  extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d("MyApp", "In service oncreate");
+
+
         intent = new Intent(BROADCAST_ACTION);
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
-        getLocation();
+        routeNumbers = intent.getStringExtra("RouteNumbers");
+                getLocation();
         handler.removeCallbacks(sendUpdatesToUI);
         handler.postDelayed(sendUpdatesToUI, 10000); // 10 second
     }
@@ -110,8 +134,9 @@ public class DriverLocation  extends Service {
             Log.d("MyApp","In service run");
 
             Bundle loc = new Bundle();
-            loc.putDouble("LATITUDE",latitude);
-            loc.putDouble("LONGITUDE",longitude);
+            loc.putDoubleArray("LATITUDE",latitude);
+            loc.putDoubleArray("LONGITUDE",longitude);
+            loc.putInt("Count",count);
             intent.setAction(BROADCAST_ACTION);
 
             intent.putExtra("LOC",loc);
@@ -120,7 +145,20 @@ public class DriverLocation  extends Service {
 
             //Call getLocation again to fetch next location update, thus, repeatedly calling getLocation
             getLocation();
+            latitude = null;
+            longitude = null;
+
             handler.postDelayed(this, 10000); // 10 seconds
         }
     };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        handler.removeCallbacks(sendUpdatesToUI);
+
+
+
+    }
 }

@@ -129,10 +129,12 @@ public class AlertDialogHelper {
             ListView modeList = new ListView(curActivity);
 
             String []detailsArray = cloudString.split(" ; ");
-            String[] nameArray = new String[detailsArray.length];
+            final String[] nameArray = new String[detailsArray.length];
             final String[] phoneNumArray = new String[detailsArray.length];
-            String[] routeArray = new String[detailsArray.length];
+            final String[] routeArray = new String[detailsArray.length];
             String[] dropPointArray = new String[detailsArray.length];
+            final String[] vehicleNumArray = new String[detailsArray.length];
+            final String[] capacityArray = new String[detailsArray.length];
 
             if(type.equals("Contact"))
             {
@@ -221,8 +223,32 @@ public class AlertDialogHelper {
                     aList.add(hm);
                 }
             }
+            else if(type.equals("Vehicles"))
+            {
+                for(int ind=0;ind<detailsArray.length;ind++)
+                {
+                    String [] parts = detailsArray[ind].split(" : ");
+                    nameArray[ind] = " Name : "+parts[0];
+                    routeArray[ind] = "  Route "+parts[3];
+                    vehicleNumArray[ind] = parts[1];
+                    capacityArray[ind] = parts[2] +" units";
 
-            if(type.equals("Routes"))
+
+                }
+
+
+                for(int i=0;i<detailsArray.length;i++){
+                    HashMap<String, String> hm = new HashMap<String,String>();
+                    hm.put("mainTxt", nameArray[i]);
+                    hm.put("subTxt", routeArray[i]);
+
+                    aList.add(hm);
+                }
+            }
+
+
+
+            if(type.equals("Routes")||type.equals("Vehicles"))
             {
                 // Keys used in Hashmap
                 String[] from = { "mainTxt","subTxt"};
@@ -262,11 +288,28 @@ public class AlertDialogHelper {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View container, int position, long id) {
                     // Getting the Container Layout of the ListView
-                    if(type.equals("Driver")||type.equals("User"))
+                    if(type.equals("Driver")||type.equals("Contact"))
                     {
                         PhoneFunctions phoneFunctions = new PhoneFunctions(curActivity);
 
                         phoneFunctions.makePhoneCall(phoneNumArray,position);
+                    }
+                    else if(type.equals("Vehicles"))
+                    {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(curActivity);
+                        alert.setTitle(" Vehicle Details");
+                        alert.setMessage(nameArray[position].substring(1)+"\n"+ routeArray[position].substring(2)+"\n"
+                                         +"Vehicle Number : "+vehicleNumArray[position]+"\n" +"Capacity : "+capacityArray[position]+"\n"
+                                         +"Driver : "+getRouteDriver(routeArray[position].substring(2).replace("Route ",""))+"\n");
+
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+
+                        alert.create().show();
                     }
 
 
@@ -484,5 +527,27 @@ public class AlertDialogHelper {
 
         dialog.show();
 
+    }
+
+    public String getRouteDriver(String routeNum)
+    {
+        String driver = "";
+
+        String allDrivers = PhoneFunctions.getFromPrivateSharedPreferences(curActivity,"ListOfDrivers");
+        String []indDriver = allDrivers.split(" ; ");
+
+        for(int i=0;i<indDriver.length;i++)
+        {
+            String [] parts = indDriver[i].split(" : ");
+             if(parts[2].equals(routeNum))
+             {
+                 driver = parts[0];
+                 break;
+             }
+
+        }
+
+
+        return driver;
     }
 }

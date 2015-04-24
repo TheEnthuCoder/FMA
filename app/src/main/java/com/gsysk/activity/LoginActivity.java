@@ -40,9 +40,6 @@ public class LoginActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Parse.initialize(getApplicationContext(), ConstantValues.APP_KEY, ConstantValues.CLIENT_KEY);
-        //      Parse.initialize(curActivity, "XdzcMtL72Ho3GmVBbCaEY7pzdg8cGXF1EkyTbdUw", "mpsFnnEuQURv0KzH4dPy0xtV8vN8gZdRTSzCDoix");
-
 
         ParseUser.enableAutomaticUser();
         ParseACL defaultACL = new ParseACL();
@@ -113,8 +110,24 @@ public class LoginActivity extends ActionBarActivity {
         {
             if(password!=null&&!password.equals("Not Found")&&!password.equals("Empty"))
             {
-                Intent intent = new Intent(this,AdminButtonActivity.class);
-                startActivity(intent);
+               String type = PhoneFunctions.getFromPrivateSharedPreferences(LoginActivity.this,"RoleTypeOfLoggedIn");
+
+               if(type.equals(ConstantValues.ROLE_ADMIN))
+               {
+                   Intent intent = new Intent(this,AdminButtonActivity.class);
+                   startActivity(intent);
+               }
+               else if(type.equals(ConstantValues.ROLE_DRIVER))
+               {
+                   Intent intent = new Intent(this,MapsDriverActivity.class);
+                   startActivity(intent);
+               }
+               else if(type.equals(ConstantValues.ROLE_USER))
+               {
+                   Intent intent = new Intent(this,MapActivityUser.class);
+                   startActivity(intent);
+               }
+
             }
         }
 

@@ -62,6 +62,9 @@ public class AdminButtonActivity extends ActionBarActivity {
     private Button listRoutes = null;
     private Button viewRoutes = null;
     private Button reset = null;
+
+    private Button listVehicles = null;
+
     public CloudInteractor pullAllService = null;
 
     private IntentFilter intentFilter = null;
@@ -90,17 +93,27 @@ public class AdminButtonActivity extends ActionBarActivity {
         intentFilter.addAction("START_REFRESH");
 
 
-        username = getIntent().getBundleExtra("DataBundle").getString("UserName");
+        try
+        {
+            username = getIntent().getBundleExtra("DataBundle").getString("UserName");
+        }
+        catch(NullPointerException e)
+        {
+            username = PhoneFunctions.getFromPrivateSharedPreferences(AdminButtonActivity.this,"UserName");
+        }
+
 
         PhoneFunctions.storeInPrivateSharedPreferences(AdminButtonActivity.this,"curLogin",username);
 
         listDrivers = (Button)findViewById(R.id.row1col1);
-        listContacts = (Button)findViewById(R.id.row3col3);
+        listContacts = (Button)findViewById(R.id.row4col1);
         listDropPoints = (Button)findViewById(R.id.row1col2);
-        trackVehicles = (Button)findViewById(R.id.row2col3);
-        listRoutes = (Button)findViewById(R.id.row1col3);
-        viewRoutes = (Button)findViewById(R.id.row2col2);
-        reset = (Button)findViewById(R.id.row3col2);
+        trackVehicles = (Button)findViewById(R.id.row3col2);
+        listRoutes = (Button)findViewById(R.id.row2col1);
+        viewRoutes = (Button)findViewById(R.id.row3col1);
+        reset = (Button)findViewById(R.id.row4col2);
+
+        listVehicles = (Button)findViewById(R.id.row2col2);
 
 		pullAllService = new CloudInteractor(AdminButtonActivity.this);
         pullAllService.initialize(ConstantValues.APP_KEY,ConstantValues.CLIENT_KEY);
@@ -211,6 +224,7 @@ public class AdminButtonActivity extends ActionBarActivity {
             if(PhoneFunctions.isInternetEnabled(AdminButtonActivity.this))
             {
                 Intent intent = new Intent(getApplicationContext(),VehicleTrackerMapActivity.class);
+                intent.putExtra("Username",username);
                 startActivity(intent);
             }
             else
@@ -229,6 +243,7 @@ public class AdminButtonActivity extends ActionBarActivity {
                 if(PhoneFunctions.isInternetEnabled(AdminButtonActivity.this))
                 {
                     Intent intent = new Intent(getApplicationContext(),RoutesMapActivity.class);
+                    intent.putExtra("Username",username);
                     startActivity(intent);
                 }
                 else
@@ -297,6 +312,26 @@ public class AdminButtonActivity extends ActionBarActivity {
             }
         });
 
+        listVehicles.setOnClickListener(new View.OnClickListener() {
+            @Override
+             public void onClick(View view) {
+                String content = PhoneFunctions.getFromPrivateSharedPreferences(AdminButtonActivity.this,"ListOfVehicles");
+                if(content==null || content.equals("Not Found"))
+                {
+                    ToastMessageHelper.displayLongToast(AdminButtonActivity.this,ConstantValues.PLEASE_TRY_AGAIN);
+                }
+                else {
+                    String titleMessage = "";
+
+                    titleMessage = "List of Vehicles : ";
+
+
+                    AlertDialogHelper createdDialog = new AlertDialogHelper(AdminButtonActivity.this, titleMessage);
+                    createdDialog.createListAlertDialog(content, "Vehicles");
+                }
+             }
+        });
+
     }
 
 
@@ -321,7 +356,7 @@ public class AdminButtonActivity extends ActionBarActivity {
         }
         else if(id==R.id.action_refresh)
         {
-            new CloudParserAsyncTask(AdminButtonActivity.this,"admin"+" : "+username,true).execute();
+            new CloudParserAsyncTask(AdminButtonActivity.this,ConstantValues.ROLE_ADMIN+" : "+username,true).execute();
         }
         else if(id == R.id.action_logout)
         {
@@ -394,7 +429,7 @@ public class AdminButtonActivity extends ActionBarActivity {
 
             if(action.equals("START_REFRESH"))
             {
-                new CloudParserAsyncTask(AdminButtonActivity.this,"admin"+" : "+username,false).execute();
+                new CloudParserAsyncTask(AdminButtonActivity.this,ConstantValues.ROLE_ADMIN+" : "+username,false).execute();
             }
         }
     };

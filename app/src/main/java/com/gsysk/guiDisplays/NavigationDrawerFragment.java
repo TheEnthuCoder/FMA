@@ -1,8 +1,14 @@
 package com.gsysk.guiDisplays;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -21,11 +27,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.gsysk.constants.ConstantValues;
 import com.gsysk.fma.R;
 import com.gsysk.phoneUtils.PhoneFunctions;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -100,19 +111,19 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(position==0){
+                /*if(position==0){
                     Log.d("MyApp", "List item zero clicked");
                     getRoute();
                 }else if(position==1){
                     Log.d("MyApp","List item 1 clicked");
                     getStopdetails();
-                }else if(position==2){
+                }else */if(position==0){
                     getAdminDetails();
-                }else if(position==3){
+                }else if(position==1){
                     getUserDetails();
-                }else if(position==4){
+                }/*else if(position==2){
                     CheckConfirm();
-                }else if(position==5){
+                }*/else if(position==2){
                     logout();
                 }
 
@@ -124,11 +135,11 @@ public class NavigationDrawerFragment extends Fragment {
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
                 new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
+                        /*getString(R.string.title_section1),
+                        getString(R.string.title_section2),*/
                         getString(R.string.title_section3),
                         getString(R.string.title_section4),
-                        getString(R.string.title_section5),
+                        //getString(R.string.title_section5),
                         getString(R.string.title_section6),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
@@ -307,24 +318,25 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
 
-    public void getRoute(){
+    /*public void getRoute(){
         Toast.makeText(getActivity(),
-                "Get Route Details", Toast.LENGTH_LONG)
+                "Get Route Details", Toast.LENGTH_SHORT)
                 .show();
-    }
+    }*/
 
-    public void getStopdetails(){
+    /*public void getStopdetails(){
         Toast.makeText(getActivity(),
-                "Get Droppoint Details", Toast.LENGTH_LONG)
+                "Get Droppoint Details", Toast.LENGTH_SHORT)
                 .show();
-    }
+    }*/
 
     public void getAdminDetails(){
-        Toast.makeText(getActivity(),
-                "Get admin Details", Toast.LENGTH_LONG)
-                .show();
+      /*  Toast.makeText(getActivity(),
+                "Get admin Details", Toast.LENGTH_SHORT)
+                .show();*/
 
         String content = PhoneFunctions.getFromPrivateSharedPreferences(getActivity(), "adminForDriver");
+        Log.d("MyApp_adtoDr",content);
         if(content==null || content.equals("Not Found"))
         {
             ToastMessageHelper.displayLongToast(getActivity(), ConstantValues.PLEASE_TRY_AGAIN);
@@ -342,11 +354,12 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     public void getUserDetails(){
-        Toast.makeText(getActivity(),
-                "Get user Details", Toast.LENGTH_LONG)
-                .show();
+      /*  Toast.makeText(getActivity(),
+                "Get user Details", Toast.LENGTH_SHORT)
+                .show();*/
 
-        String content = PhoneFunctions.getFromPrivateSharedPreferences(getActivity(), "UsersToDriver");
+   /*     String content = PhoneFunctions.getFromPrivateSharedPreferences(getActivity(), "UsersToDriver");
+        Log.d("MyApp_Usertod",content);
         if(content==null || content.equals("Not Found"))
         {
             ToastMessageHelper.displayLongToast(getActivity(), ConstantValues.PLEASE_TRY_AGAIN);
@@ -360,22 +373,105 @@ public class NavigationDrawerFragment extends Fragment {
 
             AlertDialogHelper createdDialog = new AlertDialogHelper(getActivity(), titleMessage);
             createdDialog.createListAlertDialog(content);
+        }*/
+
+        String content = PhoneFunctions.getFromPrivateSharedPreferences(getActivity(), "usersToDriverwithDPName");
+        Log.d("MyApp_Usertod",content);
+
+        String uDetails = content.split(" ; ")[0];
+        Log.d("MyApp_Usertod",uDetails);
+        String[] uDet = uDetails.split(" .,");
+
+        String[] nameArray = new String[uDet.length];
+        final String[] phoneNumArray = new String[uDet.length];
+        String[] dropPointArray  = new String[uDet.length];
+        List<HashMap<String,String>> aList = new ArrayList<HashMap<String,String>>();
+        String[] from = { "mainTxt","subTxt","subTxt2" };
+        int[] to = { R.id.mainTxt,R.id.subTxt,R.id.subTxt2};
+        int k=0;
+
+
+        for(String s:uDet){
+            nameArray[k] = s.split(" / ")[0];
+            phoneNumArray[k] = s.split(" / ")[1];
+            dropPointArray[k] = s.split(" / ")[2];
+            k++;
         }
 
+
+        for(int i=0;i<uDet.length;i++){
+            HashMap<String, String> hm = new HashMap<String,String>();
+            hm.put("mainTxt", nameArray[i]);
+            hm.put("subTxt",phoneNumArray[i]);
+            hm.put("subTxt2",dropPointArray[i]);
+            aList.add(hm);
+        }
+
+
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Users : ");
+        Dialog dialog = null;
+        ListView modeList = new ListView(getActivity());
+
+
+        SimpleAdapter modeAdapter = new SimpleAdapter(getActivity(), aList, R.layout.listview_dialog_layout, from, to);
+
+        int[] colors = {0, 0xFFFF0000, 0}; // red for the example
+        modeList.setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        modeList.setDividerHeight(2);
+        modeList.setAdapter(modeAdapter);
+
+        AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View container, int position, long id) {
+
+                /*PhoneFunctions phoneFunctions = new PhoneFunctions(getActivity());
+                phoneFunctions.makePhoneCall(phoneNumArray,position);*/
+
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + phoneNumArray[position]));
+                callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().startActivity(callIntent);
+
+            }
+        };
+
+        // Setting the item click listener for the listview
+        modeList.setOnItemClickListener(itemClickListener);
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                if(dialog!=null)
+                {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.setView(modeList);
+        dialog = builder.create();
+
+
+        dialog.show();
+
     }
 
-    public void CheckConfirm(){
+   /* public void CheckConfirm(){
         Toast.makeText(getActivity(),
-                "Check Confirmation", Toast.LENGTH_LONG)
+                "Check Confirmation", Toast.LENGTH_SHORT)
                 .show();
-    }
+    }*/
 
 
 
     public void logout(){
-        Toast.makeText(getActivity(),
-                "Check Confirmation", Toast.LENGTH_LONG)
-                .show();
-    }
+        PhoneFunctions.storeInPrivateSharedPreferences(getActivity(),"savedUsername","Empty");
+        PhoneFunctions.storeInPrivateSharedPreferences(getActivity(),"savedPassword","Empty");
 
+        getActivity().finish();
+    }
 }

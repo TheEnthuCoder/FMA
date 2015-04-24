@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.gsysk.guiDisplays.ToastMessageHelper;
+import com.gsysk.phoneUtils.PhoneFunctions;
 import com.parse.FunctionCallback;
 import com.parse.Parse;
 import com.parse.ParseACL;
@@ -46,6 +47,11 @@ public class CloudInteractor {
 
     private String resp;
     private String temp;
+
+    boolean canContinue_gotuserdetailstodriver = false;
+
+
+    private String userdetails;
 
     public CloudInteractor(Activity activity)
     {
@@ -548,7 +554,7 @@ public class CloudInteractor {
                     if (e == null) {
 
                         resp = resp.concat("#Success : "+value);
-                        //Log.d("MyApp",resp);
+                        Log.d("MyApp--getdriversroute",resp);
 
                         canContinueto_routedetails = true;
                     } else {
@@ -605,7 +611,7 @@ public class CloudInteractor {
                     if (e == null) {
 
                         resp = resp.concat("#Success : "+value);
-                        //Log.d("MyApp",resp);
+                        Log.d("MyApp--getdriversroute",resp);
 
                         canContinue_got_routedetails = true;
                     } else {
@@ -623,7 +629,35 @@ public class CloudInteractor {
             }
             canContinue_got_routedetails = false;
 
+            ParseCloud.callFunctionInBackground("getuserstodriverwithdrpids", params, new FunctionCallback<String>() {
+                public void done(String value, ParseException e) {
+                    if (e == null) {
+                        Log.d("MyApp-UserValues",value);
+                        userdetails = "Success : "+value;
+                        Log.d("MyApp-UserValues",userdetails);
+                        canContinue_gotuserdetailstodriver = true;
+                    } else {
+                        System.out.println("Got error");
+                        userdetails = "Error : "+e.getMessage().toString();
+                    }
+                }
 
+            });
+
+
+
+            while(!canContinue_gotuserdetailstodriver)
+            {
+
+            }
+            canContinue_gotuserdetailstodriver = false;
+
+            if(userdetails.startsWith("Success : "))
+            {
+                Log.d("MyApp","Store MyApp-UserValues in shared prifferenece "+userdetails);
+                PhoneFunctions.storeInPrivateSharedPreferences(curActivity, "usersToDriverwithDPName", userdetails.substring(10));
+
+            }
 
         }
         catch(Exception e)

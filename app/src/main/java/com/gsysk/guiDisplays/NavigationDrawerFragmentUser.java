@@ -1,6 +1,9 @@
 package com.gsysk.guiDisplays;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -26,6 +29,11 @@ import android.widget.Toast;
 import com.gsysk.constants.ConstantValues;
 import com.gsysk.fma.R;
 import com.gsysk.phoneUtils.PhoneFunctions;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.util.List;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -102,19 +110,19 @@ public class NavigationDrawerFragmentUser extends Fragment {
                 /*Toast.makeText(getActivity(),
                         "Click ListItem Number " + position, Toast.LENGTH_LONG)
                         .show();*/
-                if(position==0){
+                /*if(position==0){
                     Log.d("MyApp", "List item zero clicked");
                     getVehicleLocation();
-                }else if(position==1){
+                }else*/ if(position==0){
                     Log.d("MyApp","List item 1 clicked");
                     getAdmindetails();
-                }else if(position==2){
+                }else if(position==1){
                     getDriverDetails();
-                }else if(position==3){
+                }/*else if(position==3){
                     getDropPointDetails();
-                }else if(position==4){
+                }*/else if(position==2){
                     Confirm();
-                }else if(position==5){
+                }else if(position==3){
                     logout();
                 }
 
@@ -126,10 +134,10 @@ public class NavigationDrawerFragmentUser extends Fragment {
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
                 new String[]{
-                        getString(R.string.title_section1_for_user),
+                        //getString(R.string.title_section1_for_user),
                         getString(R.string.title_section2_for_user),
                         getString(R.string.title_section3_for_user),
-                        getString(R.string.title_section4_for_user),
+                        //getString(R.string.title_section4_for_user),
                         getString(R.string.title_section5_for_user),
                         getString(R.string.title_section6_for_user),
 
@@ -138,11 +146,11 @@ public class NavigationDrawerFragmentUser extends Fragment {
         return mDrawerListView;
     }
 
-    public  void getVehicleLocation() {
+   /* public  void getVehicleLocation() {
         Toast.makeText(getActivity(),
                 "Get Location", Toast.LENGTH_LONG)
                 .show();
-    }
+    }*/
 
     public void getAdmindetails(){
         Toast.makeText(getActivity(),
@@ -163,6 +171,7 @@ public class NavigationDrawerFragmentUser extends Fragment {
 
             AlertDialogHelper createdDialog = new AlertDialogHelper(getActivity(), titleMessage);
             createdDialog.createListAlertDialog(content);
+            //Log.d("MyApp-Cotent to alert",content);
         }
     }
     public void getDriverDetails(){
@@ -184,22 +193,142 @@ public class NavigationDrawerFragmentUser extends Fragment {
 
             AlertDialogHelper createdDialog = new AlertDialogHelper(getActivity(), titleMessage);
             createdDialog.createListAlertDialog(content);
+
+
+
+            //Log.d("MyApp-Cotent to alert",content);
         }
     }
-    public void getDropPointDetails(){
+    /*public void getDropPointDetails(){
         Toast.makeText(getActivity(),
                 "Get Droppoint Details", Toast.LENGTH_LONG)
                 .show();
-    }
+    }*/
     public void Confirm(){
         Toast.makeText(getActivity(),
                 "Confirm", Toast.LENGTH_LONG)
                 .show();
+
+
+        //AlertDialog with confirm and Not confirm
+        AlertDialog.Builder  alertdialog = new AlertDialog.Builder(getActivity());
+        alertdialog.setTitle("Update Status");
+        alertdialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                if(dialog!=null)
+                {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.select_dialog_singlechoice);
+        arrayAdapter.add("Update");
+        arrayAdapter.add("Reset");
+
+        alertdialog.setAdapter(arrayAdapter,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String strName = arrayAdapter.getItem(which);
+                        SharedPreferences prefs = getActivity().getSharedPreferences("saveDetails", Context.MODE_PRIVATE);
+                        String content = prefs.getString("drp_id_user",null);
+                        Log.d("MyApp-got dropid to u",content);
+                        int drp_id = Integer.parseInt(content);
+                        if(strName.equals("Update")){
+                            //Log.d("MyApp","Update");
+
+
+                            ParseQuery<ParseObject> query = ParseQuery.getQuery("DropPoints");
+                            List<ParseObject> drpts;
+                            ParseObject drpnt;// = new ParseObject("vehiclelocation");
+                            double latitude,longitude;
+                            query.whereEqualTo("drpnt_id",drp_id);
+                            try {
+                                drpts = query.find();
+                                drpnt = drpts.get(0);
+                                drpnt.put("Status", "Delivered");
+                                drpnt.saveInBackground();
+
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }else if(strName.equals("Reset")){
+                            //Log.d("MyApp","Reset");
+                            ParseQuery<ParseObject> query = ParseQuery.getQuery("DropPoints");
+                            List<ParseObject> drpts;
+                            ParseObject drpnt;// = new ParseObject("vehiclelocation");
+                            double latitude,longitude;
+                            query.whereEqualTo("drpnt_id",drp_id);
+                            try {
+                                drpts = query.find();
+                                drpnt = drpts.get(0);
+                                drpnt.put("Status", "Not Delivered");
+                                drpnt.saveInBackground();
+
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                        /*AlertDialog.Builder builderInner = new AlertDialog.Builder(
+                                getActivity());
+                        builderInner.setMessage(strName);
+                        builderInner.setTitle("Your Selected Item is");
+                        builderInner.setPositiveButton("Ok",
+                                new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(
+                                            DialogInterface dialog,
+                                            int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        builderInner.show();*/
+                    }
+                });
+        alertdialog.show();
+
+        /*ListView modeList = (ListView)getActivity().findViewById(R.id.mainListView);
+        ArrayList<String> aList = new ArrayList<String>();
+        aList.add("Update");
+        aList.add("Reset");
+        ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(getActivity(),R.layout.simpletextview,aList);
+        modeList.setAdapter(modeAdapter);
+
+        Dialog dialog = null;
+        alertdialog.setView(modeList);
+        dialog = alertdialog.create();
+        dialog.show();*/
+
+
+
+
+
+
+
+            //Log.d("MyApp-Cotent to alert",content);
+
+
+
     }
     public void logout(){
-        Toast.makeText(getActivity(),
-                "Logout", Toast.LENGTH_LONG)
-                .show();
+        PhoneFunctions.storeInPrivateSharedPreferences(getActivity(),"savedUsername","Empty");
+        PhoneFunctions.storeInPrivateSharedPreferences(getActivity(),"savedPassword","Empty");
+
+        getActivity().finish();
     }
 
 

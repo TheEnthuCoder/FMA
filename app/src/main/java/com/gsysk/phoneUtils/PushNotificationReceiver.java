@@ -43,11 +43,17 @@ public class PushNotificationReceiver extends ParsePushBroadcastReceiver {
                 {
                     Toast.makeText(context, "Change in cloud tracked..refreshing",Toast.LENGTH_LONG).show();
 
-                    SharedPreferences pref = context.getSharedPreferences("saveDetails", Context.MODE_PRIVATE);
+
 
                     // send result back to Caller Activity
                     Intent replyIntent = new Intent("START_REFRESH");
                     context.sendBroadcast(replyIntent);
+
+                    if(extras.getString("alert").equals("Map Updates"))
+                    {
+                        replyIntent = new Intent("START_REFRESH_OF_MAP");
+                        context.sendBroadcast(replyIntent);
+                    }
                 }
 
             } catch (JSONException e) {

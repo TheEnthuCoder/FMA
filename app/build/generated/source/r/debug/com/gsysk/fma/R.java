@@ -1222,9 +1222,14 @@ containing a value of this type.
         public static final int ovalborder=0x7f020082;
         public static final int powered_by_google_dark=0x7f020083;
         public static final int powered_by_google_light=0x7f020084;
-        public static final int redbusstop=0x7f020085;
-        public static final int star=0x7f020086;
-        public static final int van=0x7f020087;
+        public static final int purplebusstop=0x7f020085;
+        public static final int redbusstop=0x7f020086;
+        public static final int star=0x7f020087;
+        public static final int van_black=0x7f020088;
+        public static final int van_brown=0x7f020089;
+        public static final int van_green=0x7f02008a;
+        public static final int van_violet=0x7f02008b;
+        public static final int van_yellow=0x7f02008c;
     }
     public static final class id {
         public static final int action_bar=0x7f0a0031;
@@ -1298,13 +1303,12 @@ containing a value of this type.
         public static final int radio=0x7f0a0044;
         public static final int row1col1=0x7f0a0054;
         public static final int row1col2=0x7f0a0053;
-        public static final int row1col3=0x7f0a0055;
-        public static final int row2col1=0x7f0a0057;
-        public static final int row2col2=0x7f0a0058;
-        public static final int row2col3=0x7f0a0059;
-        public static final int row3col1=0x7f0a005b;
-        public static final int row3col2=0x7f0a005c;
-        public static final int row3col3=0x7f0a005d;
+        public static final int row2col1=0x7f0a0056;
+        public static final int row2col2=0x7f0a0057;
+        public static final int row3col1=0x7f0a0059;
+        public static final int row3col2=0x7f0a005a;
+        public static final int row4col1=0x7f0a005c;
+        public static final int row4col2=0x7f0a005d;
         public static final int sandbox=0x7f0a0022;
         public static final int satellite=0x7f0a0016;
         public static final int search_badge=0x7f0a0047;
@@ -1331,8 +1335,9 @@ containing a value of this type.
         public static final int tabMode=0x7f0a0008;
         public static final int tableLayout1=0x7f0a0051;
         public static final int tableRow1=0x7f0a0052;
-        public static final int tableRow2=0x7f0a0056;
-        public static final int tableRow3=0x7f0a005a;
+        public static final int tableRow2=0x7f0a0055;
+        public static final int tableRow3=0x7f0a0058;
+        public static final int tableRow4=0x7f0a005b;
         public static final int terrain=0x7f0a0017;
         public static final int title=0x7f0a0040;
         public static final int top_action_bar=0x7f0a0035;

@@ -2,6 +2,8 @@ package com.gsysk.constants;
 
 import android.graphics.Color;
 
+import com.gsysk.fma.R;
+
 /**
  * Created by lenovo on 15-02-2015.
  */
@@ -32,5 +34,5 @@ public class ConstantValues {
     public static final String ROLE_ADMIN = "admin";
 
     public static final int [] COLOR_ARRAY ={Color.BLUE,Color.GREEN,Color.RED,Color.MAGENTA,Color.BLACK,Color.CYAN,Color.DKGRAY,Color.GRAY,Color.LTGRAY,Color.YELLOW};
-
+    public static final int [] VEHICLE_MARKER_COLOURS = {R.drawable.van_black,R.drawable.van_brown,R.drawable.van_green,R.drawable.van_violet,R.drawable.van_yellow};
 }

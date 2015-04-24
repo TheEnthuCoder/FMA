@@ -45,6 +45,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:name="com.gsysk.activity.MainApplication"
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.gsysk.activity.LoginActivity"
@@ -98,6 +99,10 @@
 
         <service
             android:name="com.gsysk.phoneUtils.DriverLocation"
+            android:exported="false"/>
+
+        <service
+            android:name="com.gsysk.phoneUtils.DriverLocationForUser"
             android:exported="false"/>
 
         <service android:name="com.parse.PushService" />

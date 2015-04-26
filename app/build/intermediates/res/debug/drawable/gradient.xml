@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"
+    android:useLevel="false" >
+    <gradient
+        android:startColor="#062d30"
+        android:endColor="#4c898e"
+        android:useLevel="false"
+        android:type="linear"
+        android:angle="90" />
+</shape><!-- From: file:/C:/Users/lenovo/AndroidstudioProjects/FMA/app/src/main/res/drawable/gradient.xml -->

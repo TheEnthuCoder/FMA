@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.gsysk.guiDisplays.ToastMessageHelper;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -131,7 +133,15 @@ public class GPSTracker extends Service implements LocationListener {
                     }
                 }
 
-                storeLocationInCloud(latitude,longitude);
+                if(latitude==0.0 && longitude==0.0)
+                {
+
+                }
+                else
+                {
+                    storeLocationInCloud(latitude,longitude);
+                }
+
             }
 
         } catch (Exception e) {
@@ -186,7 +196,10 @@ public class GPSTracker extends Service implements LocationListener {
 
         Log.d("MyApp","In storeInCloud");
         //Get vehicle id from cloud
-        int vehicleid =1;
+        SharedPreferences prefs = getSharedPreferences("saveDetails",MODE_PRIVATE);
+        String content = prefs.getString("vehicle_id","");
+        //Log.d("MyApp-got driver id d",content);
+        int v_id = Integer.parseInt(content);
 
         /*ParseObject gameScore = new ParseObject("vehiclelocation");
         gameScore.put("vehicleid",1);
@@ -200,7 +213,7 @@ public class GPSTracker extends Service implements LocationListener {
         List<ParseObject> vehicleloc;
         ParseObject loc;// = new ParseObject("vehiclelocation");
         double latitude,longitude;
-        query.whereEqualTo("vehicleid",1);
+        query.whereEqualTo("vehicleid",v_id);
         try {
             vehicleloc = query.find();
             loc = vehicleloc.get(0);

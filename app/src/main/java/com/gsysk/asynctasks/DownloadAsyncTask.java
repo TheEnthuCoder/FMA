@@ -1,16 +1,17 @@
 package com.gsysk.asynctasks;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.gsysk.guiDisplays.ToastMessageHelper;
 import com.gsysk.mapUtils.MapFunctions;
-import com.gsysk.parser.DirectionsJSONParser;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -56,5 +57,10 @@ public class DownloadAsyncTask extends AsyncTask<String, Void, String> {
         // Invokes the thread for parsing the JSON data
         parserTask.execute(result);
     }
+
+    /**
+     * Created by lenovo on 09-04-2015.
+     */
+
 }
 

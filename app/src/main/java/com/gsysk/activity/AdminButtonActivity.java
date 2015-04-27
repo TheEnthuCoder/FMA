@@ -1,6 +1,8 @@
 package com.gsysk.activity;
 
 
+
+import com.gsysk.asynctasks.ResetStatusAsyncTask;
 import com.gsysk.guiDisplays.AlertDialogHelper;
 import com.gsysk.guiDisplays.ToastMessageHelper;
 import com.gsysk.asynctasks.CloudParserAsyncTask;
@@ -8,31 +10,23 @@ import com.gsysk.constants.ConstantValues;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 
 import com.gsysk.fma.R;
 import com.gsysk.parseCloudServices.CloudInteractor;
 import com.gsysk.phoneUtils.PhoneFunctions;
-import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
-import com.parse.ParsePushBroadcastReceiver;
 import com.parse.SaveCallback;
 
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
 
 import android.app.ProgressDialog;
@@ -46,10 +40,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.Button;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 public class AdminButtonActivity extends ActionBarActivity {

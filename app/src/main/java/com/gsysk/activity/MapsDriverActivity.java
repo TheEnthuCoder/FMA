@@ -32,6 +32,7 @@ import com.gsysk.asynctasks.DownloadAsyncTask;
 import com.gsysk.constants.ConstantValues;
 import com.gsysk.fma.R;
 import com.gsysk.guiDisplays.NavigationDrawerFragment;
+import com.gsysk.guiDisplays.ToastMessageHelper;
 import com.gsysk.mapUtils.MapFunctions;
 import com.gsysk.phoneUtils.GPSTracker;
 import com.gsysk.phoneUtils.PhoneFunctions;
@@ -70,6 +71,7 @@ public class MapsDriverActivity extends ActionBarActivity
     private LocationRequest mLocationRequest;
     private MarkerOptions options;
     Marker marker= null;
+    private boolean displayFlag = true;
     //private static final String TAG = "BroadcastTest";
     private Intent intent;
     private String username = "";
@@ -348,7 +350,7 @@ public class MapsDriverActivity extends ActionBarActivity
             Log.d("MyApp-lat",String.valueOf(latitude));
             Log.d("MyApp-lon",String.valueOf(longitude));
             LatLng latLng = new LatLng(latitude, longitude);
-            marker = mMap.addMarker(new MarkerOptions().position(latLng).title("MyLocation").icon(BitmapDescriptorFactory.fromResource(R.drawable.van_black)));
+            marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Your Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.van_black)));
             if(shouldZoom)
             {
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
@@ -499,7 +501,19 @@ public class MapsDriverActivity extends ActionBarActivity
                             + "Data passed: Latitude : " + String.valueOf(latitude) + " Longitude : "+String.valueOf(longitude),
                     Toast.LENGTH_LONG).show();*/
 
-                handleNewLocation(latitude,longitude);
+                if(latitude==0.0 && longitude == 0.0)
+                {
+                  //  if(displayFlag)
+                   // {
+                        ToastMessageHelper.displayLongToast(MapsDriverActivity.this,"Turn on the GPS");
+                        displayFlag = false;
+                    //}
+                }
+                else
+                {
+                    handleNewLocation(latitude,longitude);
+                }
+
             }
             catch(Exception e)
             {
@@ -517,7 +531,7 @@ public class MapsDriverActivity extends ActionBarActivity
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
 
 
-        options = new MarkerOptions().position(latLng).title("I am here!").icon(BitmapDescriptorFactory.fromResource(R.drawable.van_black));
+        options = new MarkerOptions().position(latLng).title("Your Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.van_black));
         if(marker!=null){
             marker.remove();
         }

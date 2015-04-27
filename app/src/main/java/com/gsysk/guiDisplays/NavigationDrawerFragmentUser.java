@@ -153,9 +153,9 @@ public class NavigationDrawerFragmentUser extends Fragment {
     }*/
 
     public void getAdmindetails(){
-        Toast.makeText(getActivity(),
-                "Get Admin Details", Toast.LENGTH_LONG)
-                .show();
+       // Toast.makeText(getActivity(),
+         //       "Get Admin Details", Toast.LENGTH_LONG)
+           //     .show();
 
         String content = PhoneFunctions.getFromPrivateSharedPreferences(getActivity(), "adminForUser");
         if(content==null || content.equals("Not Found"))
@@ -175,10 +175,10 @@ public class NavigationDrawerFragmentUser extends Fragment {
         }
     }
     public void getDriverDetails(){
-        Toast.makeText(getActivity(),
+/*        Toast.makeText(getActivity(),
                 "Get Driver Details", Toast.LENGTH_LONG)
                 .show();
-
+*/
         String content = PhoneFunctions.getFromPrivateSharedPreferences(getActivity(), "driverForUser");
         if(content==null || content.equals("Not Found"))
         {
@@ -205,10 +205,10 @@ public class NavigationDrawerFragmentUser extends Fragment {
                 .show();
     }*/
     public void Confirm(){
-        Toast.makeText(getActivity(),
+  /*      Toast.makeText(getActivity(),
                 "Confirm", Toast.LENGTH_LONG)
                 .show();
-
+*/
 
         //AlertDialog with confirm and Not confirm
         AlertDialog.Builder  alertdialog = new AlertDialog.Builder(getActivity());

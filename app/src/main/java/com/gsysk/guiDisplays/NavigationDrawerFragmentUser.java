@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.gsysk.asynctasks.ChangeDeliveryStatusAsyncTask;
 import com.gsysk.constants.ConstantValues;
 import com.gsysk.fma.R;
 import com.gsysk.phoneUtils.PhoneFunctions;
@@ -242,44 +243,12 @@ public class NavigationDrawerFragmentUser extends Fragment {
                         Log.d("MyApp-got dropid to u",content);
                         int drp_id = Integer.parseInt(content);
                         if(strName.equals("Update")){
-                            //Log.d("MyApp","Update");
 
-
-                            ParseQuery<ParseObject> query = ParseQuery.getQuery("DropPoints");
-                            List<ParseObject> drpts;
-                            ParseObject drpnt;// = new ParseObject("vehiclelocation");
-                            double latitude,longitude;
-                            query.whereEqualTo("drpnt_id",drp_id);
-                            try {
-                                drpts = query.find();
-                                drpnt = drpts.get(0);
-                                drpnt.put("Status", "Delivered");
-                                drpnt.saveInBackground();
-
-
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-
+                            new ChangeDeliveryStatusAsyncTask(getActivity(),drp_id,"Delivered").execute();
 
                         }else if(strName.equals("Reset")){
                             //Log.d("MyApp","Reset");
-                            ParseQuery<ParseObject> query = ParseQuery.getQuery("DropPoints");
-                            List<ParseObject> drpts;
-                            ParseObject drpnt;// = new ParseObject("vehiclelocation");
-                            double latitude,longitude;
-                            query.whereEqualTo("drpnt_id",drp_id);
-                            try {
-                                drpts = query.find();
-                                drpnt = drpts.get(0);
-                                drpnt.put("Status", "Not Delivered");
-                                drpnt.saveInBackground();
-
-
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-
+                            new ChangeDeliveryStatusAsyncTask(getActivity(),drp_id,"Not Delivered").execute();
 
                         }
                         /*AlertDialog.Builder builderInner = new AlertDialog.Builder(

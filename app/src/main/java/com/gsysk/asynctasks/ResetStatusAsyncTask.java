@@ -45,7 +45,11 @@ public class ResetStatusAsyncTask extends AsyncTask<Void, Void, Void> {
             {
                 if(String.valueOf(entries.get(i).get("drpnt_id")).equals(droppointIDs.get(j)))
                 {
-                    entries.get(i).put("Status", "Not Delivered");
+                    if(entries.get(i).get("Status").equals("Delivered"))
+                    {
+                        entries.get(i).put("Status", "Not Delivered");
+                    }
+
                     try {
                         entries.get(i).save();
                     } catch (ParseException e) {
